@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Validation after blur</title>
+  <style>
+    :root{
+      --bg: #0b1020;         /* dark theme by default */
+      --card: #0f172a;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --border: #23324f;
+      --focus: #3b82f6;
+      --danger: #ef4444;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, #1e293b 0%, #0b1020 60% 100%);
+      color:var(--text);
+    }
+    .wrap{max-width:760px; margin-inline:auto; padding:32px 20px;}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:18px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.25)}
+    h1{font-size:clamp(22px, 2.2vw, 30px); margin:0 0 6px}
+    p.lead{color:var(--muted); margin:0 0 20px}
+
+    form{display:grid; gap:18px}
+    .field{display:grid; gap:6px}
+    .row{display:grid; gap:18px; grid-template-columns:1fr 1fr}
+    @media (max-width:720px){ .row{grid-template-columns:1fr} }
+
+    label{font-weight:600}
+    input, select, .checkbox label span, .checkbox input{
+      accent-color: var(--focus);
+    }
+    input, select, .fake-input{
+      width:100%; padding:12px 14px; border-radius:12px;
+      border:1px solid var(--border); background:#0b1328; color:var(--text);
+      outline: none; transition: box-shadow .15s ease, border-color .15s ease;
+    }
+    input::placeholder{color:#93a1c3}
+    input:focus, select:focus{border-color:var(--focus); box-shadow:0 0 0 4px rgba(59,130,246,.25)}
+    input.invalid, select.invalid{border-color:var(--danger); box-shadow:0 0 0 4px rgba(239,68,68,.2)}
+
+    .hint{font-size:12px; color:var(--muted)}
+    .error{min-height:1.2em; font-size:13px; color:var(--danger)}
+
+    .checkbox{display:flex; align-items:flex-start; gap:10px}
+    .checkbox input{width:18px; height:18px; margin-top:3px}
+    .checkbox a{color:#9acbff; text-decoration:underline dotted}
+
+    .actions{display:flex; gap:12px; align-items:center}
+    button{
+      border:1px solid transparent; border-radius:12px; padding:12px 16px; font-weight:700; cursor:pointer;
+      background:linear-gradient(135deg, #2563eb, #0ea5e9); color:#fff; box-shadow:0 6px 18px rgba(14,165,233,.25);
+    }
+    button:focus-visible{outline:2px solid #fff; outline-offset:2px}
+    button.secondary{background:#0b1328; color:var(--text); border-color:var(--border)}
+
+    .banner{border:1px solid var(--border); border-radius:12px; padding:12px 14px; font-weight:600}
+    .banner.ok{border-color: #14532d; background: rgba(34,197,94,.1); color: var(--ok)}
+    .banner.warn{border-color: #4d2f0a; background: rgba(245,158,11,.08); color: var(--warn)}
+
+    small.req{color: var(--muted); font-weight:400}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card" role="region" aria-labelledby="title">
+      <h1 id="title">Form with validation after blur</h1>
+      <p class="lead">Error messages appear only after a field <em>loses focus</em> (the <code>blur</code> event). After that, errors update live as you type.</p>
+
+      <form id="signupForm" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="fullName">Full name <small class="req" aria-hidden="true">(required)</small></label>
+            <input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="John Smith"
+                   aria-describedby="hint-fullName err-fullName" required />
+            <p id="hint-fullName" class="hint">2–40 characters; letters, spaces, apostrophe and hyphen only.</p>
+            <p id="err-fullName" class="error" role="status" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="email">Email <small class="req" aria-hidden="true">(required)</small></label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com"
+                   aria-describedby="hint-email err-email" required />
+            <p id="hint-email" class="hint">Format: name@domain.tld</p>
+            <p id="err-email" class="error" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="password">Password <small class="req" aria-hidden="true">(required)</small></label>
+            <input id="password" name="password" type="password" autocomplete="new-password" placeholder="••••••••"
+                   aria-describedby="hint-password err-password" required />
+            <p id="hint-password" class="hint">At least 8 characters; must contain both letters and digits.</p>
+            <p id="err-password" class="error" role="status" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="confirmPassword">Confirm password <small class="req" aria-hidden="true">(required)</small></label>
+            <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="••••••••"
+                   aria-describedby="hint-confirmPassword err-confirmPassword" required />
+            <p id="hint-confirmPassword" class="hint">Repeat the password exactly.</p>
+            <p id="err-confirmPassword" class="error" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="age">Age <small class="req" aria-hidden="true">(required)</small></label>
+            <input id="age" name="age" type="number" inputmode="numeric" placeholder="e.g., 25" min="18" max="120"
+                   aria-describedby="hint-age err-age" required />
+            <p id="hint-age" class="hint">Integers only, from 18 to 120.</p>
+            <p id="err-age" class="error" role="status" aria-live="polite"></p>
+          </div>
+          <div class="field">
+            <label for="website">Website (optional)</label>
+            <input id="website" name="website" type="url" placeholder="example.com or https://example.com"
+                   aria-describedby="hint-website err-website" />
+            <p id="hint-website" class="hint">If provided, the address must be valid.</p>
+            <p id="err-website" class="error" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <!-- Country dropdown -->
+        <div class="row">
+          <div class="field">
+            <label for="country">Country <small class="req" aria-hidden="true">(required)</small></label>
+            <select id="country" name="country" aria-describedby="hint-country err-country" required>
+              <option value="">Select a country…</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="UA">Ukraine</option>
+              <option value="PL">Poland</option>
+              <option value="DE">Germany</option>
+              <option value="Other">Other</option>
+            </select>
+            <p id="hint-country" class="hint">Pick your country of residence.</p>
+            <p id="err-country" class="error" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="checkbox">
+          <input id="terms" name="terms" type="checkbox" aria-describedby="err-terms" />
+          <label for="terms"><span>I agree to the <a href="#" rel="noopener">Terms of Use</a>.</span></label>
+        </div>
+        <p id="err-terms" class="error" role="status" aria-live="polite"></p>
+
+        <div class="actions">
+          <button type="submit">Submit</button>
+          <button type="reset" class="secondary" id="resetBtn">Clear</button>
+        </div>
+
+        <div id="banner" class="banner" aria-live="polite" style="display:none"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const form = document.getElementById('signupForm');
+      const resetBtn = document.getElementById('resetBtn');
+
+      const ids = ['fullName','email','password','confirmPassword','age','country','website','terms'];
+      const touched = new Set();
+
+      const $ = (id) => document.getElementById(id);
+      const val = (id) => id === 'terms' ? $(id).checked : $(id).value.trim();
+
+      function setError(id, message){
+        const input = $(id);
+        const errorEl = $('err-' + id);
+        if(message){
+          input.classList.add('invalid');
+          input.setAttribute('aria-invalid','true');
+          errorEl.textContent = message;
+        }else{
+          input.classList.remove('invalid');
+          input.removeAttribute('aria-invalid');
+          errorEl.textContent = '';
+        }
+      }
+
+      function isLettersSpaces(str){
+        // Letters (including accented), spaces, apostrophe, hyphen
+        return /^[\p{L}’'\- ]+$/u.test(str);
+      }
+
+      function validate(id){
+        const v = val(id);
+        switch(id){
+          case 'fullName':{
+            if(!v) return 'Enter your name';
+            if(v.length < 2 || v.length > 40) return 'Length 2–40 characters';
+            if(!isLettersSpaces(v)) return 'Letters, spaces, apostrophe and hyphen only';
+            return '';
+          }
+          case 'email':{
+            if(!v) return 'Enter email';
+            const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+            return ok ? '' : 'Invalid email';
+          }
+          case 'password':{
+            if(!v) return 'Enter password';
+            if(v.length < 8) return 'At least 8 characters';
+            if(!(/[A-Za-z]/.test(v) && /\d/.test(v))) return 'Must contain letters and digits';
+            return '';
+          }
+          case 'confirmPassword':{
+            if(!v) return 'Confirm your password';
+            if(v !== $('password').value) return 'Passwords do not match';
+            return '';
+          }
+          case 'age':{
+            if(!v) return 'Enter age';
+            const n = Number(v);
+            if(!Number.isInteger(n)) return 'Integers only';
+            if(n < 18) return 'Minimum age is 18';
+            if(n > 120) return 'Unrealistic value';
+            return '';
+          }
+          case 'website':{
+            if(!v) return '';
+            try{
+              // Allow missing protocol
+              const url = v.startsWith('http://') || v.startsWith('https://') ? v : 'https://' + v;
+              new URL(url);
+              return '';
+            }catch(e){
+              return 'Invalid website address';
+            }
+          }
+          case 'country':{
+            if(!v) return 'Select your country';
+            return '';
+          }
+          case 'terms':{
+            return v ? '' : 'You must agree to the terms';
+          }
+        }
+      }
+
+      function validateAndRender(id){
+        const msg = validate(id);
+        setError(id, msg);
+        return !msg;
+      }
+
+      // Show errors after the first blur; then update them live
+      ids.forEach(id => {
+        const input = $(id);
+        const evtName = (id === 'terms' || id === 'country') ? 'change' : 'input';
+
+        input.addEventListener('blur', () => {
+          touched.add(id);
+          validateAndRender(id);
+        });
+        input.addEventListener(evtName, () => {
+          if(touched.has(id)) validateAndRender(id);
+        });
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        ids.forEach(id => touched.add(id));
+        const allValid = ids.every(validateAndRender);
+        const banner = document.getElementById('banner');
+        banner.style.display = 'block';
+        if(allValid){
+          banner.className = 'banner ok';
+          banner.textContent = 'All set! The form is valid and ready to submit.';
+          form.reset();
+          touched.clear();
+          ids.forEach(id => setError(id, ''));
+        }else{
+          banner.className = 'banner warn';
+          banner.textContent = 'Please fix the errors in the form.';
+        }
+      });
+
+      resetBtn.addEventListener('click', () => {
+        touched.clear();
+        ids.forEach(id => setError(id, ''));
+        const banner = document.getElementById('banner');
+        banner.style.display = 'none';
+        banner.textContent = '';
+        banner.className = 'banner';
+      });
+    })();
+  </script>
+</body>
+</html>
