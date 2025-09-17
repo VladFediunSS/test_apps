@@ -33,17 +33,17 @@
     @media (max-width:720px){ .row{grid-template-columns:1fr} }
 
     label{font-weight:600}
-    input, .checkbox label span, .checkbox input{
+    input, select, .checkbox label span, .checkbox input{
       accent-color: var(--focus);
     }
-    input, .fake-input{
+    input, select, .fake-input{
       width:100%; padding:12px 14px; border-radius:12px;
       border:1px solid var(--border); background:#0b1328; color:var(--text);
       outline: none; transition: box-shadow .15s ease, border-color .15s ease;
     }
     input::placeholder{color:#93a1c3}
-    input:focus{border-color:var(--focus); box-shadow:0 0 0 4px rgba(59,130,246,.25)}
-    input.invalid{border-color:var(--danger); box-shadow:0 0 0 4px rgba(239,68,68,.2)}
+    input:focus, select:focus{border-color:var(--focus); box-shadow:0 0 0 4px rgba(59,130,246,.25)}
+    input.invalid, select.invalid{border-color:var(--danger); box-shadow:0 0 0 4px rgba(239,68,68,.2)}
 
     .hint{font-size:12px; color:var(--muted)}
     .error{min-height:1.2em; font-size:13px; color:var(--danger)}
@@ -125,6 +125,24 @@
           </div>
         </div>
 
+        <!-- Country dropdown -->
+        <div class="row">
+          <div class="field">
+            <label for="country">Country <small class="req" aria-hidden="true">(required)</small></label>
+            <select id="country" name="country" aria-describedby="hint-country err-country" required>
+              <option value="">Select a country…</option>
+              <option value="US">United States</option>
+              <option value="GB">United Kingdom</option>
+              <option value="UA">Ukraine</option>
+              <option value="PL">Poland</option>
+              <option value="DE">Germany</option>
+              <option value="Other">Other</option>
+            </select>
+            <p id="hint-country" class="hint">Pick your country of residence.</p>
+            <p id="err-country" class="error" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
         <div class="checkbox">
           <input id="terms" name="terms" type="checkbox" aria-describedby="err-terms" />
           <label for="terms"><span>I agree to the <a href="#" rel="noopener">Terms of Use</a>.</span></label>
@@ -146,7 +164,7 @@
       const form = document.getElementById('signupForm');
       const resetBtn = document.getElementById('resetBtn');
 
-      const ids = ['fullName','email','password','confirmPassword','age','website','terms'];
+      const ids = ['fullName','email','password','confirmPassword','age','country','website','terms'];
       const touched = new Set();
 
       const $ = (id) => document.getElementById(id);
@@ -215,6 +233,10 @@
               return 'Invalid website address';
             }
           }
+          case 'country':{
+            if(!v) return 'Select your country';
+            return '';
+          }
           case 'terms':{
             return v ? '' : 'You must agree to the terms';
           }
@@ -230,7 +252,7 @@
       // Show errors after the first blur; then update them live
       ids.forEach(id => {
         const input = $(id);
-        const evtName = id === 'terms' ? 'change' : 'input';
+        const evtName = (id === 'terms' || id === 'country') ? 'change' : 'input';
 
         input.addEventListener('blur', () => {
           touched.add(id);
