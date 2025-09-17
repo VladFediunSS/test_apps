@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Validation after blur</title>
+  <title>Валідація полів після втрати фокуса</title>
   <style>
     :root{
-      --bg: #0b1020;         /* dark theme by default */
+      --bg: #0b1020;         /* темна тема за замовчуванням */
       --card: #0f172a;
       --text: #e5e7eb;
       --muted: #94a3b8;
@@ -33,17 +33,17 @@
     @media (max-width:720px){ .row{grid-template-columns:1fr} }
 
     label{font-weight:600}
-    input, select, .checkbox label span, .checkbox input{
+    input, .checkbox label span, .checkbox input{
       accent-color: var(--focus);
     }
-    input, select, .fake-input{
+    input, .fake-input{
       width:100%; padding:12px 14px; border-radius:12px;
       border:1px solid var(--border); background:#0b1328; color:var(--text);
       outline: none; transition: box-shadow .15s ease, border-color .15s ease;
     }
     input::placeholder{color:#93a1c3}
-    input:focus, select:focus{border-color:var(--focus); box-shadow:0 0 0 4px rgba(59,130,246,.25)}
-    input.invalid, select.invalid{border-color:var(--danger); box-shadow:0 0 0 4px rgba(239,68,68,.2)}
+    input:focus{border-color:var(--focus); box-shadow:0 0 0 4px rgba(59,130,246,.25)}
+    input.invalid{border-color:var(--danger); box-shadow:0 0 0 4px rgba(239,68,68,.2)}
 
     .hint{font-size:12px; color:var(--muted)}
     .error{min-height:1.2em; font-size:13px; color:var(--danger)}
@@ -70,88 +70,70 @@
 <body>
   <div class="wrap">
     <div class="card" role="region" aria-labelledby="title">
-      <h1 id="title">Form with validation after blur</h1>
-      <p class="lead">Error messages appear only after a field <em>loses focus</em> (the <code>blur</code> event). After that, errors update live as you type.</p>
+      <h1 id="title">Форма з валідацією після втрати фокуса</h1>
+      <p class="lead">Повідомлення про помилки з'являються лише після того, як поле <em>втратило фокус</em> (подія <code>blur</code>), і зникають, коли курсор знову потрапляє в поле (подія <code>focus</code>).</p>
 
       <form id="signupForm" novalidate>
         <div class="row">
           <div class="field">
-            <label for="fullName">Full name <small class="req" aria-hidden="true">(required)</small></label>
-            <input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="John Smith"
+            <label for="fullName">Повне ім'я <small class="req" aria-hidden="true">(обов'язково)</small></label>
+            <input id="fullName" name="fullName" type="text" autocomplete="name" placeholder="Іван Петренко"
                    aria-describedby="hint-fullName err-fullName" required />
-            <p id="hint-fullName" class="hint">2–40 characters; letters, spaces, apostrophe and hyphen only.</p>
+            <p id="hint-fullName" class="hint">2–40 символів, лише літери, пробіли, апостроф і дефіс.</p>
             <p id="err-fullName" class="error" role="status" aria-live="polite"></p>
           </div>
           <div class="field">
-            <label for="email">Email <small class="req" aria-hidden="true">(required)</small></label>
+            <label for="email">E‑mail <small class="req" aria-hidden="true">(обов'язково)</small></label>
             <input id="email" name="email" type="email" autocomplete="email" placeholder="name@example.com"
                    aria-describedby="hint-email err-email" required />
-            <p id="hint-email" class="hint">Format: name@domain.tld</p>
+            <p id="hint-email" class="hint">Формат: ім'я@домен.домен</p>
             <p id="err-email" class="error" role="status" aria-live="polite"></p>
           </div>
         </div>
 
         <div class="row">
           <div class="field">
-            <label for="password">Password <small class="req" aria-hidden="true">(required)</small></label>
+            <label for="password">Пароль <small class="req" aria-hidden="true">(обов'язково)</small></label>
             <input id="password" name="password" type="password" autocomplete="new-password" placeholder="••••••••"
                    aria-describedby="hint-password err-password" required />
-            <p id="hint-password" class="hint">At least 8 characters; must contain both letters and digits.</p>
+            <p id="hint-password" class="hint">Мінімум 8 символів, має містити літери й цифри.</p>
             <p id="err-password" class="error" role="status" aria-live="polite"></p>
           </div>
           <div class="field">
-            <label for="confirmPassword">Confirm password <small class="req" aria-hidden="true">(required)</small></label>
+            <label for="confirmPassword">Підтвердження пароля <small class="req" aria-hidden="true">(обов'язково)</small></label>
             <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" placeholder="••••••••"
                    aria-describedby="hint-confirmPassword err-confirmPassword" required />
-            <p id="hint-confirmPassword" class="hint">Repeat the password exactly.</p>
+            <p id="hint-confirmPassword" class="hint">Повторіть пароль без помилок.</p>
             <p id="err-confirmPassword" class="error" role="status" aria-live="polite"></p>
           </div>
         </div>
 
         <div class="row">
           <div class="field">
-            <label for="age">Age <small class="req" aria-hidden="true">(required)</small></label>
-            <input id="age" name="age" type="number" inputmode="numeric" placeholder="e.g., 25" min="18" max="120"
+            <label for="age">Вік <small class="req" aria-hidden="true">(обов'язково)</small></label>
+            <input id="age" name="age" type="number" inputmode="numeric" placeholder="Напр., 25" min="18" max="120"
                    aria-describedby="hint-age err-age" required />
-            <p id="hint-age" class="hint">Integers only, from 18 to 120.</p>
+            <p id="hint-age" class="hint">Тільки ціле число, від 18 до 120.</p>
             <p id="err-age" class="error" role="status" aria-live="polite"></p>
           </div>
           <div class="field">
-            <label for="website">Website (optional)</label>
-            <input id="website" name="website" type="url" placeholder="example.com or https://example.com"
+            <label for="website">Сайт (необов'язково)</label>
+            <input id="website" name="website" type="url" placeholder="example.com або https://example.com"
                    aria-describedby="hint-website err-website" />
-            <p id="hint-website" class="hint">If provided, the address must be valid.</p>
+            <p id="hint-website" class="hint">Якщо вкажете, адреса має бути валідною.</p>
             <p id="err-website" class="error" role="status" aria-live="polite"></p>
-          </div>
-        </div>
-
-        <!-- Country dropdown -->
-        <div class="row">
-          <div class="field">
-            <label for="country">Country <small class="req" aria-hidden="true">(required)</small></label>
-            <select id="country" name="country" aria-describedby="hint-country err-country" required>
-              <option value="">Select a country…</option>
-              <option value="US">United States</option>
-              <option value="GB">United Kingdom</option>
-              <option value="UA">Ukraine</option>
-              <option value="PL">Poland</option>
-              <option value="DE">Germany</option>
-              <option value="Other">Other</option>
-            </select>
-            <p id="hint-country" class="hint">Pick your country of residence.</p>
-            <p id="err-country" class="error" role="status" aria-live="polite"></p>
           </div>
         </div>
 
         <div class="checkbox">
           <input id="terms" name="terms" type="checkbox" aria-describedby="err-terms" />
-          <label for="terms"><span>I agree to the <a href="#" rel="noopener">Terms of Use</a>.</span></label>
+          <label for="terms"><span>Погоджуюсь з <a href="#" rel="noopener">умовами використання</a>.</span></label>
         </div>
         <p id="err-terms" class="error" role="status" aria-live="polite"></p>
 
         <div class="actions">
-          <button type="submit">Submit</button>
-          <button type="reset" class="secondary" id="resetBtn">Clear</button>
+          <button type="submit">Надіслати</button>
+          <button type="reset" class="secondary" id="resetBtn">Очистити</button>
         </div>
 
         <div id="banner" class="banner" aria-live="polite" style="display:none"></div>
@@ -164,7 +146,7 @@
       const form = document.getElementById('signupForm');
       const resetBtn = document.getElementById('resetBtn');
 
-      const ids = ['fullName','email','password','confirmPassword','age','country','website','terms'];
+      const ids = ['fullName','email','password','confirmPassword','age','website','terms'];
       const touched = new Set();
 
       const $ = (id) => document.getElementById(id);
@@ -185,7 +167,7 @@
       }
 
       function isLettersSpaces(str){
-        // Letters (including accented), spaces, apostrophe, hyphen
+        // Літери (включно з українськими), пробіли, апостроф, дефіс
         return /^[\p{L}’'\- ]+$/u.test(str);
       }
 
@@ -193,52 +175,48 @@
         const v = val(id);
         switch(id){
           case 'fullName':{
-            if(!v) return 'Enter your name';
-            if(v.length < 2 || v.length > 40) return 'Length 2–40 characters';
-            if(!isLettersSpaces(v)) return 'Letters, spaces, apostrophe and hyphen only';
+            if(!v) return "Вкажіть ім'я";
+            if(v.length < 2 || v.length > 40) return 'Довжина 2–40 символів';
+            if(!isLettersSpaces(v)) return 'Лише літери, пробіли, апостроф та дефіс';
             return '';
           }
           case 'email':{
-            if(!v) return 'Enter email';
+            if(!v) return 'Вкажіть email';
             const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-            return ok ? '' : 'Invalid email';
+            return ok ? '' : 'Некоректний email';
           }
           case 'password':{
-            if(!v) return 'Enter password';
-            if(v.length < 8) return 'At least 8 characters';
-            if(!(/[A-Za-z]/.test(v) && /\d/.test(v))) return 'Must contain letters and digits';
+            if(!v) return 'Вкажіть пароль';
+            if(v.length < 8) return 'Мінімум 8 символів';
+            if(!(/[A-Za-zА-Яа-яЇїІіЄєҐґ]/.test(v) && /\d/.test(v))) return 'Має містити літери та цифри';
             return '';
           }
           case 'confirmPassword':{
-            if(!v) return 'Confirm your password';
-            if(v !== $('password').value) return 'Passwords do not match';
+            if(!v) return 'Підтвердіть пароль';
+            if(v !== $('password').value) return 'Паролі не збігаються';
             return '';
           }
           case 'age':{
-            if(!v) return 'Enter age';
+            if(!v) return 'Вкажіть вік';
             const n = Number(v);
-            if(!Number.isInteger(n)) return 'Integers only';
-            if(n < 18) return 'Minimum age is 18';
-            if(n > 120) return 'Unrealistic value';
+            if(!Number.isInteger(n)) return 'Тільки ціле число';
+            if(n < 18) return 'Мінімальний вік 18';
+            if(n > 120) return 'Нереалістичне значення';
             return '';
           }
           case 'website':{
             if(!v) return '';
             try{
-              // Allow missing protocol
+              // Дозволяємо без протоколу
               const url = v.startsWith('http://') || v.startsWith('https://') ? v : 'https://' + v;
               new URL(url);
               return '';
             }catch(e){
-              return 'Invalid website address';
+              return 'Некоректна адреса сайту';
             }
           }
-          case 'country':{
-            if(!v) return 'Select your country';
-            return '';
-          }
           case 'terms':{
-            return v ? '' : 'You must agree to the terms';
+            return v ? '' : 'Потрібно погодитися з умовами';
           }
         }
       }
@@ -249,15 +227,21 @@
         return !msg;
       }
 
-      // Show errors after the first blur; then update them live
+      // Показуємо помилки лише після blur; на focus тимчасово ховаємо помилки
       ids.forEach(id => {
         const input = $(id);
-        const evtName = (id === 'terms' || id === 'country') ? 'change' : 'input';
 
+        // На focus прибираємо підсвітку й текст помилки (якщо були)
+        input.addEventListener('focus', () => {
+          if(touched.has(id)) setError(id, '');
+        });
+
+        // На blur перевіряємо й показуємо помилку, якщо є
         input.addEventListener('blur', () => {
           touched.add(id);
           validateAndRender(id);
         });
+      });
         input.addEventListener(evtName, () => {
           if(touched.has(id)) validateAndRender(id);
         });
@@ -271,13 +255,13 @@
         banner.style.display = 'block';
         if(allValid){
           banner.className = 'banner ok';
-          banner.textContent = 'All set! The form is valid and ready to submit.';
+          banner.textContent = 'Готово! Форма валідна і готова до відправлення.';
           form.reset();
           touched.clear();
           ids.forEach(id => setError(id, ''));
         }else{
           banner.className = 'banner warn';
-          banner.textContent = 'Please fix the errors in the form.';
+          banner.textContent = 'Будь ласка, виправте помилки у формі.';
         }
       });
 
