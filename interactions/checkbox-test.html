@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checkbox and Radio Test</title>
+</head>
+<body>
+
+  <h1>Checkbox and Radio Test</h1>
+
+  <!-- 1. Single checkbox -->
+  <h2>1. Single Checkbox</h2>
+  <input type="checkbox" id="cb-single">
+  <label for="cb-single">Accept</label>
+  <p id="out-cb-single">Checkbox: unchecked</p>
+
+  <!-- 2. Multiple checkboxes -->
+  <h2>2. Multiple Checkboxes</h2>
+  <input type="checkbox" id="cb-a" value="A">
+  <label for="cb-a">Option A</label><br>
+
+  <input type="checkbox" id="cb-b" value="B">
+  <label for="cb-b">Option B</label><br>
+
+  <input type="checkbox" id="cb-c" value="C">
+  <label for="cb-c">Option C</label>
+
+  <p id="out-cb-multi">Selected: (none)</p>
+
+  <script>
+    // 1. Single checkbox
+    const cbSingle = document.getElementById("cb-single");
+    cbSingle.addEventListener("click", () => {
+      document.getElementById("out-cb-single").textContent =
+        "Checkbox: " + (cbSingle.checked ? "checked" : "unchecked");
+    });
+
+    // 2. Multiple checkboxes
+    const multiCbs = ["cb-a", "cb-b", "cb-c"];
+    multiCbs.forEach(id => {
+      document.getElementById(id).addEventListener("click", updateMultiCheckbox);
+    });
+
+    function updateMultiCheckbox() {
+      const selected = multiCbs
+        .map(id => document.getElementById(id))
+        .filter(cb => cb.checked)
+        .map(cb => cb.value);
+
+      document.getElementById("out-cb-multi").textContent =
+        "Selected: " + (selected.length ? selected.join(", ") : "(none)");
+    }
+  </script>
+
+</body>
+</html>
