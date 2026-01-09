@@ -1,0 +1,28 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Tooltip Test (Hover / Focus)</title>
+</head>
+<body>
+  <h1>tooltip-test.html</h1>
+
+  <button id="btn-title" title="Test message" data-testid="btn-title">
+    Show Tooltip
+  </button>
+  <p id="out-title" data-testid="out-title">Title tooltip: (no DOM tooltip)</p>
+
+  <script>
+    const set = (id, text) => (document.getElementById(id).textContent = text);
+
+    // Note: native "title" tooltips are browser UI, not DOM; we can only log focus/hover events.
+    const btnTitle = document.getElementById("btn-title");
+    btnTitle.addEventListener("mouseenter", () => set("out-title", "Title tooltip: hover (browser UI)"));
+    btnTitle.addEventListener("mouseleave", () => set("out-title", "Title tooltip: mouse left"));
+    btnTitle.addEventListener("focus", () => set("out-title", "Title tooltip: focused (browser UI)"));
+    btnTitle.addEventListener("blur", () => set("out-title", "Title tooltip: blurred"));
+  </script>
+</body>
+</html>
+```
