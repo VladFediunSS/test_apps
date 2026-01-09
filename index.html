@@ -1,55 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Form Validation</title>
-  <style>
-    body { font-family: sans-serif; max-width: 400px; margin: 40px auto; }
-    label { display: block; margin: 12px 0 4px; }
-    input, select { width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-    input.error, select.error { border-color: red; }
-    .err { color: red; font-size: 0.9em; }
-  </style>
-</head>
-<body>
-  <h2>Simple Form</h2>
-  <p>All fields are required. Name = letters only, Phone = digits only.</p>
-
-  <form>
-    <label>Name</label>
-    <input id="name" required>
-    <div id="nameErr" class="err"></div>
-
-    <label>Phone</label>
-    <input id="phone" required>
-    <div id="phoneErr" class="err"></div>
-
-    <label>Country</label>
-    <select id="country" required>
-      <option value="">-- select --</option>
-      <option>USA</option>
-      <option>Canada</option>
-      <option>Germany</option>
-    </select>
-    <div id="countryErr" class="err"></div>
-
-    <button type="submit">Submit</button>
-  </form>
-
-<script>
-const rules = {
-  name: v => /^[A-Za-z]+$/.test(v) || "Only letters allowed",
-  phone: v => /^\d+$/.test(v) || "Only digits allowed",
-  country: v => v !== "" || "Please select a country"
-};
-for (let id in rules) {
-  let el = document.getElementById(id), err = document.getElementById(id+"Err");
-  el.addEventListener("blur", () => {
-    let check = rules[id](el.value.trim());
-    if (check !== true) { err.textContent = check; el.classList.add("error"); }
-  });
-  el.addEventListener("focus", () => { err.textContent=""; el.classList.remove("error"); });
-}
-</script>
-</body>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>UI Test Pages</title>
+    <link rel="stylesheet" href="./assets/styles.css" />
+  </head>
+  <body>
+    <h1>UI Test Pages</h1>
+    <ul>
+      <li><a href="./login/">Login page</a></li>
+      <li><a href="./modal/">Modal page</a></li>
+      <li><a href="./form/">Form page</a></li>
+    </ul>
+  </body>
 </html>
