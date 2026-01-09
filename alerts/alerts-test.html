@@ -4,145 +4,53 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Browser Alerts Test</title>
-  <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
-    body { margin: 24px; }
-    h1 { margin: 0 0 16px; font-size: 20px; }
-    .hint { margin: 0 0 20px; opacity: 0.8; }
-    .grid { display: grid; gap: 12px; max-width: 900px; }
-    .row {
-      display: grid;
-      grid-template-columns: 220px 1fr;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-    }
-    button { padding: 8px 12px; cursor: pointer; }
-    button:active { transform: translateY(1px); }
-    .result { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
-    .muted { opacity: 0.75; }
-    .tag {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid #ddd;
-      font-size: 12px;
-      margin-left: 8px;
-    }
-  </style>
+  <title>Alerts Test</title>
 </head>
 <body>
-  <h1>Browser Alerts Test</h1>
-  <p class="hint">
-    Click a button → an alert/confirm/prompt appears → the result is shown on the right.
-    <span class="tag muted">data-testid included</span>
-  </p>
+  <h1>Alerts Test</h1>
 
-  <div class="grid">
+  <h2>Alert</h2>
+  <button type="button" id="btn-alert" data-testid="btn-alert">Show alert</button>
+  <p id="result-alert" data-testid="result-alert">Alert result: (not triggered yet)</p>
 
-    <!-- Simple alert -->
-    <div class="row">
-      <div>
-        <button
-          type="button"
-          data-testid="btn-alert"
-          id="btn-alert"
-        >
-          Show alert
-        </button>
-      </div>
-      <div class="result" data-testid="result-alert" id="result-alert">
-        Alert result: <span class="muted">(not triggered yet)</span>
-      </div>
-    </div>
+  <h2>Confirm</h2>
+  <button type="button" id="btn-confirm" data-testid="btn-confirm">Show confirm</button>
+  <p id="result-confirm" data-testid="result-confirm">Confirm result: (not triggered yet)</p>
 
-    <!-- Confirm -->
-    <div class="row">
-      <div>
-        <button
-          type="button"
-          data-testid="btn-confirm"
-          id="btn-confirm"
-        >
-          Show confirm
-        </button>
-      </div>
-      <div class="result" data-testid="result-confirm" id="result-confirm">
-        Confirm result: <span class="muted">(not triggered yet)</span>
-      </div>
-    </div>
+  <h2>Prompt</h2>
+  <button type="button" id="btn-prompt" data-testid="btn-prompt">Show prompt</button>
+  <p id="result-prompt" data-testid="result-prompt">Input alert value: (not triggered yet)</p>
 
-    <!-- Prompt -->
-    <div class="row">
-      <div>
-        <button
-          type="button"
-          data-testid="btn-prompt"
-          id="btn-prompt"
-        >
-          Show prompt
-        </button>
-      </div>
-      <div class="result" data-testid="result-prompt" id="result-prompt">
-        Input alert value: <span class="muted">(not triggered yet)</span>
-      </div>
-    </div>
-
-    <!-- Beforeunload (special) -->
-    <div class="row">
-      <div>
-        <button
-          type="button"
-          data-testid="btn-beforeunload"
-          id="btn-beforeunload"
-        >
-          Enable beforeunload
-        </button>
-      </div>
-      <div class="result" data-testid="result-beforeunload" id="result-beforeunload">
-        Beforeunload: <span class="muted">disabled</span>
-      </div>
-    </div>
-
-  </div>
+  <h2>Beforeunload</h2>
+  <button type="button" id="btn-beforeunload" data-testid="btn-beforeunload">Enable beforeunload</button>
+  <p id="result-beforeunload" data-testid="result-beforeunload">Beforeunload: disabled</p>
 
   <script>
     const setText = (id, text) => {
-      const el = document.getElementById(id);
-      el.textContent = text;
+      document.getElementById(id).textContent = text;
     };
 
-    // 1) alert()
     document.getElementById("btn-alert").addEventListener("click", () => {
       alert("Simple alert: click OK to continue.");
       setText("result-alert", "Alert result: accepted (OK)");
     });
 
-    // 2) confirm()
     document.getElementById("btn-confirm").addEventListener("click", () => {
       const ok = confirm("Confirm alert: OK = true, Cancel = false.");
-      setText("result-confirm", `Confirm result: ${ok}`);
+      setText("result-confirm", "Confirm result: " + ok);
     });
 
-    // 3) prompt()
     document.getElementById("btn-prompt").addEventListener("click", () => {
       const value = prompt("Prompt alert: enter a value or click Cancel.", "test");
-      // prompt returns string or null
       if (value === null) {
         setText("result-prompt", "Input alert value: null (canceled)");
       } else {
-        setText("result-prompt", `Input alert value: '${value}'`);
+        setText("result-prompt", "Input alert value: '" + value + "'");
       }
     });
 
-    // 4) beforeunload (browser-managed, not always a classic JS modal)
     let beforeUnloadEnabled = false;
-
     const beforeUnloadHandler = (e) => {
-      // Most browsers ignore custom messages, but returning a value triggers the confirmation UI.
       e.preventDefault();
       e.returnValue = "";
       return "";
@@ -153,10 +61,7 @@
 
       if (beforeUnloadEnabled) {
         window.addEventListener("beforeunload", beforeUnloadHandler);
-        setText(
-          "result-beforeunload",
-          "Beforeunload: enabled (try refreshing or closing the tab to see the dialog)"
-        );
+        setText("result-beforeunload", "Beforeunload: enabled (try refreshing or closing the tab)");
         document.getElementById("btn-beforeunload").textContent = "Disable beforeunload";
       } else {
         window.removeEventListener("beforeunload", beforeUnloadHandler);
