@@ -1,0 +1,101 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Click Elements Test</title>
+</head>
+<body>
+  <h1>Click Elements Test</h1>
+
+  <!-- Button -->
+  <h2>Button</h2>
+  <button type="button" id="btn" data-testid="btn">Click me</button>
+  <p id="out-btn" data-testid="out-btn">Button: (not clicked)</p>
+
+  <!-- Link -->
+  <h2>Link (prevented navigation)</h2>
+  <a href="https://example.com" id="link" data-testid="link">Click link</a>
+  <p id="out-link" data-testid="out-link">Link: (not clicked)</p>
+
+  <!-- Input: button -->
+  <h2>Input type="button"</h2>
+  <input type="button" id="in-btn" data-testid="in-btn" value="Click input button" />
+  <p id="out-in-btn" data-testid="out-in-btn">Input button: (not clicked)</p>
+
+  <!-- Checkbox -->
+  <h2>Checkbox</h2>
+  <input type="checkbox" id="cb" data-testid="cb" />
+  <label for="cb" id="lbl-cb" data-testid="lbl-cb">Click checkbox or label</label>
+  <p id="out-cb" data-testid="out-cb">Checkbox: unchecked</p>
+
+  <!-- Radio -->
+  <h2>Radio</h2>
+  <input type="radio" name="r" id="r1" value="A" data-testid="r1" />
+  <label for="r1" data-testid="lbl-r1">A</label>
+  <input type="radio" name="r" id="r2" value="B" data-testid="r2" />
+  <label for="r2" data-testid="lbl-r2">B</label>
+  <p id="out-radio" data-testid="out-radio">Radio: (none selected)</p>
+
+  <!-- Select -->
+  <h2>Select</h2>
+  <select id="sel" data-testid="sel">
+    <option value="one">One</option>
+    <option value="two">Two</option>
+  </select>
+  <p id="out-sel" data-testid="out-sel">Select: one</p>
+
+  <!-- Details/Summary -->
+  <h2>Details / Summary</h2>
+  <details id="det" data-testid="det">
+    <summary id="sum" data-testid="sum">Click to toggle</summary>
+    <p>Details content</p>
+  </details>
+  <p id="out-det" data-testid="out-det">Details: closed</p>
+
+  <script>
+    const set = (id, text) => (document.getElementById(id).textContent = text);
+
+    document.getElementById("btn").addEventListener("click", () => {
+      set("out-btn", "Button: clicked");
+    });
+
+    document.getElementById("link").addEventListener("click", (e) => {
+      e.preventDefault();
+      set("out-link", "Link: clicked");
+    });
+
+    document.getElementById("in-btn").addEventListener("click", () => {
+      set("out-in-btn", 'Input button: clicked');
+    });
+
+    const cb = document.getElementById("cb");
+    cb.addEventListener("click", () => {
+      set("out-cb", "Checkbox: " + (cb.checked ? "checked" : "unchecked"));
+    });
+
+    const updateRadio = () => {
+      const r1 = document.getElementById("r1");
+      const r2 = document.getElementById("r2");
+      const value = r1.checked ? "A" : r2.checked ? "B" : "(none selected)";
+      set("out-radio", "Radio: " + value);
+    };
+    document.getElementById("r1").addEventListener("click", updateRadio);
+    document.getElementById("r2").addEventListener("click", updateRadio);
+
+    const sel = document.getElementById("sel");
+    // Selection often changes via click + change; using change is the most reliable signal.
+    sel.addEventListener("change", () => {
+      set("out-sel", "Select: " + sel.value);
+    });
+
+    const det = document.getElementById("det");
+    // Details toggles on click; 'toggle' is the reliable state event.
+    det.addEventListener("toggle", () => {
+      set("out-det", "Details: " + (det.open ? "open" : "closed"));
+    });
+  </script>
+</body>
+</html>
+```
