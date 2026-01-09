@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SVG Icon Button Test</title>
+</head>
+<body>
+
+  <h1>SVG Icon Button Test</h1>
+
+  <!-- Icon button with inline SVG -->
+  <button
+    type="button"
+    id="svg-icon-btn"
+    aria-label="Settings"
+    data-testid="svg-icon-btn"
+  >
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+    >
+      <circle cx="8" cy="8" r="6"></circle>
+    </svg>
+  </button>
+
+  <p id="svg-icon-result" data-testid="svg-icon-result">
+    SVG icon button: not clicked
+  </p>
+
+  <script>
+    const btn = document.getElementById("svg-icon-btn");
+    const out = document.getElementById("svg-icon-result");
+
+    btn.addEventListener("click", () => {
+      out.textContent = "SVG icon button: clicked";
+    });
+  </script>
+
+</body>
+</html>
