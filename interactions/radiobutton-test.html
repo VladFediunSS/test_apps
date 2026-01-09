@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checkbox and Radio Test</title>
+</head>
+<body>
+
+  <h1>radiobutton-test.html</h1>
+
+  <!-- 3. Single radio -->
+  <input type="radio" id="radio-single" name="single-radio">
+  <label for="radio-single">Accept</label>
+  <p id="out-radio-single">Radio state: unchecked</p>
+
+  <script>
+    // 3. Single radio
+    const radioSingle = document.getElementById("radio-single");
+    radioSingle.addEventListener("click", () => {
+      document.getElementById("out-radio-single").textContent =
+        "Radio state: " + (radioSingle.checked ? "checked" : "unchecked");
+    });
+  </script>
+
+</body>
+</html>
