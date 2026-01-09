@@ -6,13 +6,13 @@
 </head>
 <body>
 
-  <h1>Checkbox and Radio Test</h1>
+  <h1>Checkbox Test</h1>
 
   <!-- 1. Single checkbox -->
   <h2>1. Single Checkbox</h2>
   <input type="checkbox" id="cb-single">
   <label for="cb-single">Accept</label>
-  <p id="out-cb-single">Checkbox: unchecked</p>
+  <p id="out-cb-single">Checkbox state: unchecked</p>
 
   <!-- 2. Multiple checkboxes -->
   <h2>2. Multiple Checkboxes</h2>
@@ -32,7 +32,7 @@
     const cbSingle = document.getElementById("cb-single");
     cbSingle.addEventListener("click", () => {
       document.getElementById("out-cb-single").textContent =
-        "Checkbox: " + (cbSingle.checked ? "checked" : "unchecked");
+        "Checkbox state: " + (cbSingle.checked ? "checked" : "unchecked");
     });
 
     // 2. Multiple checkboxes
