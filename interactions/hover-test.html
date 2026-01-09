@@ -6,51 +6,23 @@
   <title>Tooltip Test (Hover / Focus)</title>
 </head>
 <body>
-  <h1>Tooltip Test (Hover / Focus)</h1>
-
-  <h2>1) Native tooltip (title)</h2>
-  <button id="btn-title" title="Native tooltip via title" data-testid="btn-title">
-    Hover or focus me (title)
-  </button>
-  <p id="out-title" data-testid="out-title">Title tooltip: (no DOM tooltip)</p>
-
-  <h2>2) Custom tooltip (shows on hover or focus)</h2>
+  <h1>hover-test.html</h1>
   <button
     id="btn-custom"
     type="button"
     aria-describedby="tip-custom"
     data-testid="btn-custom"
   >
-    Hover or focus me (custom)
+    Test Button
   </button>
   <span id="tip-custom" role="tooltip" hidden data-testid="tip-custom">
-    Custom tooltip shown on hover or focus
+    Test message
   </span>
   <p id="out-custom" data-testid="out-custom">Custom tooltip: hidden</p>
 
-  <h2>3) Focus-only custom tooltip</h2>
-  <button
-    id="btn-focus"
-    type="button"
-    aria-describedby="tip-focus"
-    data-testid="btn-focus"
-  >
-    Focus me (Tab) (focus-only)
-  </button>
-  <span id="tip-focus" role="tooltip" hidden data-testid="tip-focus">
-    Focus-only tooltip
-  </span>
-  <p id="out-focus" data-testid="out-focus">Focus-only tooltip: hidden</p>
 
   <script>
     const set = (id, text) => (document.getElementById(id).textContent = text);
-
-    // Note: native "title" tooltips are browser UI, not DOM; we can only log focus/hover events.
-    const btnTitle = document.getElementById("btn-title");
-    btnTitle.addEventListener("mouseenter", () => set("out-title", "Title tooltip: hover (browser UI)"));
-    btnTitle.addEventListener("mouseleave", () => set("out-title", "Title tooltip: mouse left"));
-    btnTitle.addEventListener("focus", () => set("out-title", "Title tooltip: focused (browser UI)"));
-    btnTitle.addEventListener("blur", () => set("out-title", "Title tooltip: blurred"));
 
     // Custom tooltip (hover OR focus)
     const btnCustom = document.getElementById("btn-custom");
@@ -69,19 +41,6 @@
     btnCustom.addEventListener("mouseleave", () => hideCustom("mouse leave"));
     btnCustom.addEventListener("focus", () => showCustom("focus"));
     btnCustom.addEventListener("blur", () => hideCustom("blur"));
-
-    // Focus-only tooltip
-    const btnFocus = document.getElementById("btn-focus");
-    const tipFocus = document.getElementById("tip-focus");
-
-    btnFocus.addEventListener("focus", () => {
-      tipFocus.hidden = false;
-      set("out-focus", "Focus-only tooltip: shown (focus)");
-    });
-    btnFocus.addEventListener("blur", () => {
-      tipFocus.hidden = true;
-      set("out-focus", "Focus-only tooltip: hidden (blur)");
-    });
   </script>
 </body>
 </html>
