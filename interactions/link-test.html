@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Click Elements Test</title>
+</head>
+<body>
+  <h1>link-test.html</h1>
+
+  <!-- Link -->
+  <h2>Link (prevented navigation)</h2>
+  <a href="https://testlink.com" id="link" data-testid="link">Click link</a>
+  <p id="out-link" data-testid="out-link">Link: (not clicked)</p>
+
+  <script>
+    const set = (id, text) => (document.getElementById(id).textContent = text);
+
+    document.getElementById("link").addEventListener("click", (e) => {
+      e.preventDefault();
+      set("out-link", "Link: clicked");
+    });
+  </script>
+</body>
+</html>
