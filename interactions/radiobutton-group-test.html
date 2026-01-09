@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checkbox and Radio Test</title>
+</head>
+<body>
+
+  <h1>radiobutton-group-test.html</h1>
+
+  <!-- 4. Radio group -->
+  <input type="radio" id="r1" name="group" value="Option 1">
+  <label for="r1">Option 1</label><br>
+
+  <input type="radio" id="r2" name="group" value="Option 2">
+  <label for="r2">Option 2</label>
+
+  <p id="out-radio-group">Selected: (none)</p>
+
+  <script>
+
+    // 4. Radio group
+    const radios = ["r1", "r2"];
+    radios.forEach(id => {
+      document.getElementById(id).addEventListener("click", updateRadioGroup);
+    });
+
+    function updateRadioGroup() {
+      const selected = radios
+        .map(id => document.getElementById(id))
+        .find(r => r.checked);
+
+      document.getElementById("out-radio-group").textContent =
+        "Selected: " + (selected ? selected.value : "(none)");
+    }
+  </script>
+
+</body>
+</html>
