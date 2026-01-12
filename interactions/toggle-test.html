@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Toggle Switch Test</title>
+</head>
+<body>
+
+  <h1>Toggle Switch Test</h1>
+
+  <!-- 1. Switch (styled checkbox) -->
+  <h2>1. Switch (checkbox-based)</h2>
+  <label>
+    <input type="checkbox" id="switch" role="switch">
+    Switch
+  </label>
+  <p id="out-switch">Switch: off</p>
+
+  <!-- 2. Button toggle -->
+  <h2>2. Button toggle (aria-pressed)</h2>
+  <button id="btn-toggle" aria-pressed="false">
+    Toggle
+  </button>
+  <p id="out-btn">Button toggle: off</p>
+
+  <!-- 3. Custom switch (span) -->
+  <h2>3. Custom switch (span)</h2>
+  <span id="span-switch" role="switch" tabindex="0">
+    Switch
+  </span>
+  <p id="out-span">Span switch: off</p>
+
+  <script>
+    // 1. Switch (checkbox)
+    const sw = document.getElementById("switch");
+    sw.addEventListener("click", () => {
+      document.getElementById("out-switch").textContent =
+        "Switch: " + (sw.checked ? "on" : "off");
+    });
+
+    // 2. Button toggle
+    const btn = document.getElementById("btn-toggle");
+    btn.addEventListener("click", () => {
+      const pressed = btn.getAttribute("aria-pressed") === "true";
+      btn.setAttribute("aria-pressed", String(!pressed));
+      document.getElementById("out-btn").textContent =
+        "Button toggle: " + (!pressed ? "on" : "off");
+    });
+
+    // 3. Span switch
+    const span = document.getElementById("span-switch");
+    let spanOn = false;
+    span.addEventListener("click", () => {
+      spanOn = !spanOn;
+      document.getElementById("out-span").textContent =
+        "Span switch: " + (spanOn ? "on" : "off");
+    });
+  </script>
+
+</body>
+</html>
