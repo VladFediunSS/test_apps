@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Native Select Multiple Test</title>
+</head>
+<body>
+
+  <h1>select-multiple-test.html</h1>
+
+  <label for="select"><strong>Select options (multiple)</strong></label><br>
+
+  <select id="select" multiple size="4" data-testid="select">
+    <option value="A">Option A</option>
+    <option value="B">Option B</option>
+    <option value="C" disabled>Option C (disabled)</option>
+    <option value="D">Option D</option>
+  </select>
+
+  <p id="out-select">Select: no action</p>
+
+  <script>
+    const select = document.getElementById("select");
+    const out = document.getElementById("out-select");
+
+    select.addEventListener("focus", () => {
+      out.textContent = "Select: focused";
+    });
+
+    select.addEventListener("blur", () => {
+      out.textContent = "Select: blurred";
+    });
+
+    select.addEventListener("change", () => {
+      const values = Array.from(select.selectedOptions)
+        .map(o => o.value);
+
+      out.textContent =
+        "Select: [" + (values.length ? values.join(", ") : "none") + "]";
+    });
+  </script>
+
+</body>
+</html>
