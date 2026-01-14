@@ -1,0 +1,71 @@
+```html
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Copy Paste Contenteditable Test</title>
+</head>
+<body>
+
+  <h1>cp-contenteditable-test.html</h1>
+
+  <!-- 1. Plain text -->
+  <label for="plain-text"><strong>Message</strong></label><br>
+  <p id="plain-text" data-testid="plain-text">This is the test message</p>
+  <p id="out-plain-text">Plain text: no action</p>
+
+  <!-- 2. Contenteditable (source) -->
+  <p><strong>Source Editable</strong></p>
+  <div
+    id="source-editable"
+    contenteditable="true"
+    data-testid="source-editable"
+  >Source editable text</div>
+  <p id="out-source-editable">Source editable: no action</p>
+
+  <!-- 3. Contenteditable (target) -->
+  <p><strong>Target Editable</strong></p>
+  <div
+    id="target-editable"
+    contenteditable="true"
+    data-testid="target-editable"
+  ></div>
+  <p id="out-target-editable">Target editable: no action</p>
+
+  <script>
+    function logCopy(id, label) {
+      const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
+      el.addEventListener("copy", () => {
+        out.textContent = label + ": copied (Ctrl/Cmd+C or context menu)";
+      });
+    }
+
+    function logPaste(id, label) {
+      const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
+      el.addEventListener("paste", () => {
+        setTimeout(() => {
+          out.textContent = label + ': pasted value = "' + el.textContent + '"';
+        }, 0);
+      });
+    }
+
+    // Plain text (copy only)
+    logCopy("plain-text", "Plain text");
+
+    // Contenteditable
+    logCopy("source-editable", "Source editable");
+    logPaste("source-editable", "Source editable");
+
+    logCopy("target-editable", "Target editable");
+    logPaste("target-editable", "Target editable");
+  </script>
+
+</body>
+</html>
+```
