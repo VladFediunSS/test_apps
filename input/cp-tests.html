@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Copy Paste Elements Test</title>
+</head>
+<body>
+
+  <h1>Copy / Paste Test</h1>
+
+  <!-- 1. Plain text -->
+  <h2>1. Plain text (UI text)</h2>
+  <p id="plain-text" data-testid="plain-text">
+Line 1
+Line 2
+Line 3
+  </p>
+  <p id="out-plain">Plain text: no action</p>
+
+  <!-- 2. Textarea -->
+  <h2>2. Textarea (multiline)</h2>
+  <textarea
+    id="textarea"
+    rows="3"
+    cols="60"
+    data-testid="textarea"
+  >Line A
+Line B
+Line C</textarea>
+  <p id="out-textarea">Textarea: no action</p>
+
+  <!-- 3. Input -->
+  <h2>3. Input field</h2>
+  <input
+    type="text"
+    id="input"
+    size="60"
+    value="Single line text"
+    data-testid="input"
+  >
+  <p id="out-input">Input: no action</p>
+
+  <!-- 4. Contenteditable (often missed) -->
+  <h2>4. Contenteditable</h2>
+  <div
+    id="editable"
+    contenteditable="true"
+    data-testid="editable"
+  >
+Editable text
+Second line
+  </div>
+  <p id="out-editable">Contenteditable: no action</p>
+
+  <script>
+    function logCopy(id, label) {
+      const el = document.getElementById(id);
+      el.addEventListener("copy", () => {
+        document.getElementById("out-" + id).textContent =
+          label + ": copied (Ctrl/Cmd+C or context menu)";
+      });
+    }
+
+    function logPaste(id, label) {
+      const el = document.getElementById(id);
+      el.addEventListener("paste", () => {
+        setTimeout(() => {
+          document.getElementById("out-" + id).textContent =
+            label + ": pasted value = \"" + el.textContent || el.value + "\"";
+        }, 0);
+      });
+    }
+
+    // Plain text (copy only)
+    logCopy("plain-text", "Plain text");
+
+    // Textarea
+    logCopy("textarea", "Textarea");
+    logPaste("textarea", "Textarea");
+
+    // Input
+    logCopy("input", "Input");
+    logPaste("input", "Input");
+
+    // Contenteditable
+    logCopy("editable", "Contenteditable");
+    logPaste("editable", "Contenteditable");
+  </script>
+
+</body>
+</html>
