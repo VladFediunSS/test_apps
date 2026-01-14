@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Combo Box Test</title>
+</head>
+<body>
+
+  <h1>select-combobox-test.html</h1>
+
+  <label for="combo-input"><strong>Combo box</strong></label><br>
+
+  <!-- Combobox input -->
+  <input
+    id="combo-input"
+    type="text"
+    role="combobox"
+    aria-autocomplete="list"
+    aria-expanded="false"
+    aria-controls="combo-list"
+    autocomplete="off"
+    data-testid="combo-input"
+  >
+
+  <!-- Options list -->
+  <ul id="combo-list" role="listbox" hidden data-testid="combo-list">
+    <li role="option" data-value="Apple" tabindex="0">Apple</li>
+    <li role="option" data-value="Banana" tabindex="0">Banana</li>
+    <li role="option" data-value="Cherry" tabindex="0">Cherry</li>
+  </ul>
+
+  <p id="out-combo">Combo box: no action</p>
+
+  <script>
+    const input = document.getElementById("combo-input");
+    const list = document.getElementById("combo-list");
+    const out = document.getElementById("out-combo");
+
+    const allOptions = Array.from(list.querySelectorAll('[role="option"]'));
+
+    function openList(reason) {
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      out.textContent = "Combo box: opened (" + reason + ")";
+    }
+
+    function closeList(reason) {
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      out.textContent = "Combo box: closed (" + reason + ")";
+    }
+
+    function filterOptions() {
+      const q = input.value.toLowerCase();
+      let any = false;
+
+      allOptions.forEach(opt => {
+        const v = (opt.getAttribute("data-value") || opt.textContent).toLowerCase();
+        const show = v.includes(q);
+        opt.hidden = !show;
+        if (show) any = true;
+      });
+
+      out.textContent = 'Combo box: input="' + input.value + '" (filtered)';
+      if (any) openList("input"); else closeList("no matches");
+    }
+
+    function selectValue(value) {
+      input.value = value;
+      out.textContent = 'Combo box: selected "' + value + '"';
+      closeList("selected");
+    }
+
+    // Open on focus, filter on typing
+    input.addEventListener("focus", () => openList("focus"));
+    input.addEventListener("input", filterOptions);
+
+    // Click option
+    list.addEventListener("click", (e) => {
+      const opt = e.target.closest('[role="option"]');
+      if (!opt || opt.hidden) return;
+      selectValue(opt.getAttribute("data-value") || opt.textContent);
+    });
+
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (e.target === input || list.contains(e.target)) return;
+      closeList("outside click");
+    });
+
+    // Close on blur (after click processing)
+    input.addEventListener("blur", () => {
+      setTimeout(() => {
+        if (document.activeElement !== input) closeList("blur");
+      }, 0);
+    });
+  </script>
+
+</body>
+</html>
