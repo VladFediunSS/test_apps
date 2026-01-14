@@ -3,6 +3,24 @@
 <head>
   <meta charset="utf-8">
   <title>Combo Box Test</title>
+  <style>
+    /* minimal "native-like" dropdown container */
+    #combo-wrap { position: relative; display: inline-block; }
+    #combo-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      margin: 2px 0 0;
+      padding: 0;
+      list-style: none;
+      border: 1px solid #000;
+      background: #fff;
+      max-height: 120px;
+      overflow: auto;
+    }
+    #combo-list li { padding: 2px 4px; cursor: default; }
+  </style>
 </head>
 <body>
 
@@ -10,24 +28,24 @@
 
   <label for="combo-input"><strong>Combo box</strong></label><br>
 
-  <!-- Combobox input -->
-  <input
-    id="combo-input"
-    type="text"
-    role="combobox"
-    aria-autocomplete="list"
-    aria-expanded="false"
-    aria-controls="combo-list"
-    autocomplete="off"
-    data-testid="combo-input"
-  >
+  <span id="combo-wrap">
+    <input
+      id="combo-input"
+      type="text"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded="false"
+      aria-controls="combo-list"
+      autocomplete="off"
+      data-testid="combo-input"
+    >
 
-  <!-- Options list -->
-  <ul id="combo-list" role="listbox" hidden data-testid="combo-list">
-    <li role="option" data-value="Apple" tabindex="0">Apple</li>
-    <li role="option" data-value="Banana" tabindex="0">Banana</li>
-    <li role="option" data-value="Cherry" tabindex="0">Cherry</li>
-  </ul>
+    <ul id="combo-list" role="listbox" hidden data-testid="combo-list">
+      <li role="option" data-value="Apple">Apple</li>
+      <li role="option" data-value="Banana">Banana</li>
+      <li role="option" data-value="Cherry">Cherry</li>
+    </ul>
+  </span>
 
   <p id="out-combo">Combo box: no action</p>
 
@@ -35,8 +53,7 @@
     const input = document.getElementById("combo-input");
     const list = document.getElementById("combo-list");
     const out = document.getElementById("out-combo");
-
-    const allOptions = Array.from(list.querySelectorAll('[role="option"]'));
+    const options = Array.from(list.querySelectorAll('[role="option"]'));
 
     function openList(reason) {
       list.hidden = false;
@@ -50,48 +67,49 @@
       out.textContent = "Combo box: closed (" + reason + ")";
     }
 
-    function filterOptions() {
-      const q = input.value.toLowerCase();
-      let any = false;
-
-      allOptions.forEach(opt => {
-        const v = (opt.getAttribute("data-value") || opt.textContent).toLowerCase();
-        const show = v.includes(q);
-        opt.hidden = !show;
-        if (show) any = true;
-      });
-
-      out.textContent = 'Combo box: input="' + input.value + '" (filtered)';
-      if (any) openList("input"); else closeList("no matches");
-    }
-
     function selectValue(value) {
       input.value = value;
       out.textContent = 'Combo box: selected "' + value + '"';
       closeList("selected");
     }
 
-    // Open on focus, filter on typing
+    function filterOptions() {
+      const q = input.value.toLowerCase();
+      let any = false;
+
+      options.forEach(opt => {
+        const v = (opt.getAttribute("data-value") || opt.textContent).toLowerCase();
+        const show = v.includes(q);
+        opt.hidden = !show;
+        if (show) any = true;
+      });
+
+      if (any) openList("input");
+      else closeList("no matches");
+    }
+
+    // Open on focus; filter on typing
     input.addEventListener("focus", () => openList("focus"));
     input.addEventListener("input", filterOptions);
 
-    // Click option
-    list.addEventListener("click", (e) => {
+    // IMPORTANT: use mousedown so selection happens BEFORE input blur closes the list
+    list.addEventListener("mousedown", (e) => {
       const opt = e.target.closest('[role="option"]');
       if (!opt || opt.hidden) return;
+      e.preventDefault(); // prevents focus changes that can interfere
       selectValue(opt.getAttribute("data-value") || opt.textContent);
     });
 
-    // Close when clicking outside
-    document.addEventListener("click", (e) => {
+    // Close on outside click
+    document.addEventListener("mousedown", (e) => {
       if (e.target === input || list.contains(e.target)) return;
       closeList("outside click");
     });
 
-    // Close on blur (after click processing)
+    // Close on blur (but allow list click to win because of mousedown handler above)
     input.addEventListener("blur", () => {
       setTimeout(() => {
-        if (document.activeElement !== input) closeList("blur");
+        if (!list.contains(document.activeElement)) closeList("blur");
       }, 0);
     });
   </script>
