@@ -9,9 +9,11 @@
   <h1>Copy / Paste Test</h1>
 
   <!-- 1. Plain text -->
-  <h2>Message</h2>
+  <p>
+  <label for="plain-text"><strong>Message</strong></label><br>
   <p id="plain-text" data-testid="plain-text">
-This is test message
+This is the test message
+  </p>
   </p>
   <p id="out-plain">Plain text: no action</p>
 
@@ -24,17 +26,19 @@ This is test message
 
   
   <!-- 2. Textarea -->
-  <h2>2. Textarea (multiline)</h2>
-  <label for="source-textarea">Source Area</label>
+  <p>
+  <label for="source-textarea"><strong>Source Area</strong></label><br>
   <textarea
-    id="source-textarea"
+    id="target-textarea"
     rows="3"
     cols="60"
     data-testid="source-textarea"
   >Line A
 Line B
 Line C</textarea>
-  <p id="out-textarea">Textarea: no action</p>
+  <p id="out-source-textarea">Textarea: no action</p>
+  </p>
+
   
   <p>
   <label for="target-textarea"><strong>Target Area</strong></label><br>
@@ -44,7 +48,7 @@ Line C</textarea>
     cols="60"
     data-testid="target-textarea"
   ></textarea>
-  <p id="out-textarea">Textarea: no action</p>
+  <p id="out-target-textarea">Textarea: no action</p>
   </p>
 
   
