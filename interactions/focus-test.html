@@ -36,7 +36,24 @@
   </select>
   <p id="out-select">Select: no focus</p>
 
-  <!-- 6. Contenteditable -->
+  <!-- 6. Checkbox -->
+  <h2>Checkbox</h2>
+  <input type="checkbox" id="checkbox" data-testid="checkbox">
+  <label for="checkbox">Checkbox</label>
+  <p id="out-checkbox">Checkbox: no focus</p>
+
+  <!-- 7. Radio buttons -->
+  <h2>Radio buttons</h2>
+  <input type="radio" id="radio-a" name="radio-group" data-testid="radio-a">
+  <label for="radio-a">Radio A</label><br>
+
+  <input type="radio" id="radio-b" name="radio-group" data-testid="radio-b">
+  <label for="radio-b">Radio B</label>
+
+  <p id="out-radio-a">Radio A: no focus</p>
+  <p id="out-radio-b">Radio B: no focus</p>
+
+  <!-- 8. Contenteditable -->
   <h2>Contenteditable</h2>
   <div
     id="editable"
@@ -48,7 +65,7 @@ Editable text
   </div>
   <p id="out-editable">Contenteditable: no focus</p>
 
-  <!-- 7. Custom focusable (tabindex) -->
+  <!-- 9. Custom focusable -->
   <h2>Tabindex element</h2>
   <span id="tab-span" tabindex="0" data-testid="tab-span">Focusable span</span>
   <p id="out-tab-span">Span: no focus</p>
@@ -72,6 +89,9 @@ Editable text
     trackFocus("button", "Button");
     trackFocus("link", "Link");
     trackFocus("select", "Select");
+    trackFocus("checkbox", "Checkbox");
+    trackFocus("radio-a", "Radio A");
+    trackFocus("radio-b", "Radio B");
     trackFocus("editable", "Contenteditable");
     trackFocus("tab-span", "Span");
   </script>
