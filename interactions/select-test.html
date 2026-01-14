@@ -12,9 +12,9 @@
 
   <select id="select" data-testid="select">
     <option value="">-- choose --</option>
-    <option value="one">Option One</option>
-    <option value="two">Option Two</option>
-    <option value="three" disabled>Option Three (disabled)</option>
+    <option value="A">Option A</option>
+    <option value="B">Option B</option>
+    <option value="C" disabled>Option C (disabled)</option>
   </select>
 
   <p id="out-select">Select: no action</p>
@@ -33,7 +33,7 @@
 
     select.addEventListener("change", () => {
       out.textContent =
-        'Select: changed to "' + select.value + '"';
+        "Select: " + "select.value";
     });
   </script>
 
