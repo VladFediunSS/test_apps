@@ -9,26 +9,43 @@
   <h1>Copy / Paste Test</h1>
 
   <!-- 1. Plain text -->
-  <h2>1. Plain text (UI text)</h2>
+  <h2>Message</h2>
   <p id="plain-text" data-testid="plain-text">
-Line 1
-Line 2
-Line 3
+This is test message
   </p>
   <p id="out-plain">Plain text: no action</p>
 
+  <label>
+    Message
+  <p id="plain-text" data-testid="plain-text">
+  This is test message
+  </p>
+  </label>
+
+  
   <!-- 2. Textarea -->
   <h2>2. Textarea (multiline)</h2>
+  <label for="source-textarea">Source Area</label>
   <textarea
-    id="textarea"
+    id="source-textarea"
     rows="3"
     cols="60"
-    data-testid="textarea"
+    data-testid="source-textarea"
   >Line A
 Line B
 Line C</textarea>
   <p id="out-textarea">Textarea: no action</p>
 
+    <label for="source-textarea">Target Area</label>
+  <textarea
+    id="target-textarea"
+    rows="3"
+    cols="60"
+    data-testid="target-textarea"
+  ></textarea>
+  <p id="out-textarea">Textarea: no action</p>
+
+  
   <!-- 3. Input -->
   <h2>3. Input field</h2>
   <input
@@ -75,8 +92,12 @@ Second line
     logCopy("plain-text", "Plain text");
 
     // Textarea
-    logCopy("textarea", "Textarea");
-    logPaste("textarea", "Textarea");
+    logCopy("source-textarea", "Textarea");
+    logPaste("source-textarea", "Textarea");
+    
+    logCopy("target-textarea", "Textarea");
+    logPaste("target-textarea", "Textarea");
+    
 
     // Input
     logCopy("input", "Input");
