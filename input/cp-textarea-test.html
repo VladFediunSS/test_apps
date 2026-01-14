@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Copy Paste Elements Test</title>
+</head>
+<body>
+
+  <h1>cp-textarea-test.html</h1>
+
+  <!-- 1. Plain text -->
+  <p>
+  <label for="plain-text"><strong>Message</strong></label><br>
+  <p id="plain-text" data-testid="plain-text">
+This is the test message
+  </p>
+  </p>
+  <p id="out-plain">Plain text: no action</p>
+  
+  <!-- 2. Textarea -->
+  <p>
+  <label for="source-textarea"><strong>Source Area</strong></label><br>
+  <textarea
+    id="target-textarea"
+    rows="3"
+    cols="60"
+    data-testid="source-textarea"
+  >Line A
+Line B
+Line C</textarea>
+  <p id="out-source-textarea">Sourse TA: no action</p>
+  </p>
+
+  <p>
+  <label for="target-textarea"><strong>Target Area</strong></label><br>
+  <textarea
+    id="target-textarea"
+    rows="3"
+    cols="60"
+    data-testid="target-textarea"
+  ></textarea>
+  <p id="out-target-textarea">Target TA: no action</p>
+  </p>
+
+  <script>
+    function logCopy(id, label) {
+      const el = document.getElementById(id);
+      el.addEventListener("copy", () => {
+        document.getElementById("out-" + id).textContent =
+          label + ": copied (Ctrl/Cmd+C or context menu)";
+      });
+    }
+
+    function logPaste(id, label) {
+      const el = document.getElementById(id);
+      el.addEventListener("paste", () => {
+        setTimeout(() => {
+          document.getElementById("out-" + id).textContent =
+            label + ": pasted value = \"" + el.textContent || el.value + "\"";
+        }, 0);
+      });
+    }
+
+    // Plain text (copy only)
+    logCopy("plain-text", "Plain text");
+
+    // Textarea
+    logCopy("source-textarea", "Sourse TA");
+    logPaste("source-textarea", "Sourse TA");
+    
+    logCopy("target-textarea", "Target TA");
+    logPaste("target-textarea", "Target TA");
+    
+  </script>
+
+</body>
+</html>
