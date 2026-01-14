@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Copy Paste Input Test</title>
+</head>
+<body>
+
+  <h1>cp-input-test.html</h1>
+
+  <!-- 1. Plain text -->
+  <label for="plain-text"><strong>Message</strong></label><br>
+  <p id="plain-text" data-testid="plain-text">This is the test message</p>
+  <p id="out-plain-text">Plain text: no action</p>
+
+  <!-- 2. Input (source) -->
+  <label for="source-input"><strong>Source Input</strong></label><br>
+  <input
+    type="text"
+    id="source-input"
+    size="60"
+    value="Source input value"
+    data-testid="source-input"
+  >
+  <p id="out-source-input">Source input: no action</p>
+
+  <!-- 3. Input (target) -->
+  <label for="target-input"><strong>Target Input</strong></label><br>
+  <input
+    type="text"
+    id="target-input"
+    size="60"
+    data-testid="target-input"
+  >
+  <p id="out-target-input">Target input: no action</p>
+
+  <script>
+    function logCopy(id, label) {
+      const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
+      el.addEventListener("copy", () => {
+        out.textContent = label + ": copied (Ctrl/Cmd+C or context menu)";
+      });
+    }
+
+    function logPaste(id, label) {
+      const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
+      el.addEventListener("paste", () => {
+        setTimeout(() => {
+          out.textContent =
+            label + ': pasted value = "' + el.value + '"';
+        }, 0);
+      });
+    }
+
+    // Plain text (copy only)
+    logCopy("plain-text", "Plain text");
+
+    // Inputs
+    logCopy("source-input", "Source input");
+    logPaste("source-input", "Source input");
+
+    logCopy("target-input", "Target input");
+    logPaste("target-input", "Target input");
+  </script>
+
+</body>
+</html>
