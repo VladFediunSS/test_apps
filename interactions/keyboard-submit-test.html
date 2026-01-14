@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Input Confirm Test</title>
+</head>
+<body>
+
+  <h1>keyboard-submit-test.html</h1>
+
+  <label for="text"><strong>Input</strong></label><br>
+  <input type="text" id="text" data-testid="text">
+  <button type="button" id="submit" data-testid="submit">Submit</button>
+
+  <p id="result" data-testid="result">Result: no action</p>
+
+  <script>
+    const input = document.getElementById("text");
+    const submit = document.getElementById("submit");
+    const result = document.getElementById("result");
+
+    function confirm(source) {
+      result.textContent = 'Result: confirmed by ' + source + ' with value="' + input.value + '"';
+    }
+
+    function clear(source) {
+      input.value = "";
+      result.textContent = "Result: cleared by " + source;
+    }
+
+    // 1) Button Submit confirms input
+    submit.addEventListener("click", () => confirm("button"));
+
+    // 2) Enter confirms input
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        confirm("Enter");
+      }
+      // 4) Esc clears input
+      if (e.key === "Escape") {
+        e.preventDefault();
+        clear("Escape");
+      }
+    });
+
+    // 3) Ctrl/Cmd+S confirms input (capture at document level)
+    document.addEventListener("keydown", (e) => {
+      const isSave = (e.key === "s" || e.key === "S") && (e.ctrlKey || e.metaKey);
+      if (isSave) {
+        e.preventDefault();
+        confirm((e.metaKey ? "Cmd+S" : "Ctrl+S"));
+      }
+    });
+  </script>
+
+</body>
+</html>
