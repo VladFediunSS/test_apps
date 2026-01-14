@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Focus Blur Test</title>
+</head>
+<body>
+
+  <h1>Focus / Blur Test</h1>
+
+  <!-- 1. Input -->
+  <h2>Input</h2>
+  <input type="text" id="input" data-testid="input">
+  <p id="out-input">Input: no focus</p>
+
+  <!-- 2. Textarea -->
+  <h2>Textarea</h2>
+  <textarea id="textarea" rows="2" cols="40" data-testid="textarea"></textarea>
+  <p id="out-textarea">Textarea: no focus</p>
+
+  <!-- 3. Button -->
+  <h2>Button</h2>
+  <button id="button" data-testid="button">Button</button>
+  <p id="out-button">Button: no focus</p>
+
+  <!-- 4. Link -->
+  <h2>Link</h2>
+  <a href="#" id="link" data-testid="link">Focusable link</a>
+  <p id="out-link">Link: no focus</p>
+
+  <!-- 5. Select -->
+  <h2>Select</h2>
+  <select id="select" data-testid="select">
+    <option>One</option>
+    <option>Two</option>
+  </select>
+  <p id="out-select">Select: no focus</p>
+
+  <!-- 6. Contenteditable -->
+  <h2>Contenteditable</h2>
+  <div
+    id="editable"
+    contenteditable="true"
+    tabindex="0"
+    data-testid="editable"
+  >
+Editable text
+  </div>
+  <p id="out-editable">Contenteditable: no focus</p>
+
+  <!-- 7. Custom focusable (tabindex) -->
+  <h2>Tabindex element</h2>
+  <span id="tab-span" tabindex="0" data-testid="tab-span">Focusable span</span>
+  <p id="out-tab-span">Span: no focus</p>
+
+  <script>
+    function trackFocus(id, label) {
+      const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+
+      el.addEventListener("focus", () => {
+        out.textContent = label + ": focused";
+      });
+
+      el.addEventListener("blur", () => {
+        out.textContent = label + ": blurred";
+      });
+    }
+
+    trackFocus("input", "Input");
+    trackFocus("textarea", "Textarea");
+    trackFocus("button", "Button");
+    trackFocus("link", "Link");
+    trackFocus("select", "Select");
+    trackFocus("editable", "Contenteditable");
+    trackFocus("tab-span", "Span");
+  </script>
+
+</body>
+</html>
