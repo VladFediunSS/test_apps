@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Native Select Test</title>
+</head>
+<body>
+
+  <h1>select-test.html</h1>
+
+  <label for="select"><strong>Select option</strong></label><br>
+
+  <select id="select" data-testid="select">
+    <option value="">-- choose --</option>
+    <option value="one">Option One</option>
+    <option value="two">Option Two</option>
+    <option value="three" disabled>Option Three (disabled)</option>
+  </select>
+
+  <p id="out-select">Select: no action</p>
+
+  <script>
+    const select = document.getElementById("select");
+    const out = document.getElementById("out-select");
+
+    select.addEventListener("focus", () => {
+      out.textContent = "Select: focused";
+    });
+
+    select.addEventListener("blur", () => {
+      out.textContent = "Select: blurred";
+    });
+
+    select.addEventListener("change", () => {
+      out.textContent =
+        'Select: changed to "' + select.value + '"';
+    });
+  </script>
+
+</body>
+</html>
