@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,29 +10,23 @@
   <h1>cp-textarea-test.html</h1>
 
   <!-- 1. Plain text -->
-  <p>
   <label for="plain-text"><strong>Message</strong></label><br>
-  <p id="plain-text" data-testid="plain-text">
-This is the test message
-  </p>
-  </p>
-  <p id="out-plain">Plain text: no action</p>
-  
-  <!-- 2. Textarea -->
-  <p>
+  <p id="plain-text" data-testid="plain-text">This is the test message</p>
+  <p id="out-plain-text">Plain text: no action</p>
+
+  <!-- 2. Textarea (source) -->
   <label for="source-textarea"><strong>Source Area</strong></label><br>
   <textarea
-    id="target-textarea"
+    id="source-textarea"
     rows="3"
     cols="60"
     data-testid="source-textarea"
   >Line A
 Line B
 Line C</textarea>
-  <p id="out-source-textarea">Sourse TA: no action</p>
-  </p>
+  <p id="out-source-textarea">Source TA: no action</p>
 
-  <p>
+  <!-- 3. Textarea (target) -->
   <label for="target-textarea"><strong>Target Area</strong></label><br>
   <textarea
     id="target-textarea"
@@ -40,23 +35,31 @@ Line C</textarea>
     data-testid="target-textarea"
   ></textarea>
   <p id="out-target-textarea">Target TA: no action</p>
-  </p>
 
   <script>
+    function getValue(el) {
+      return ("value" in el) ? el.value : el.textContent;
+    }
+
     function logCopy(id, label) {
       const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
       el.addEventListener("copy", () => {
-        document.getElementById("out-" + id).textContent =
-          label + ": copied (Ctrl/Cmd+C or context menu)";
+        out.textContent = label + ": copied (Ctrl/Cmd+C or context menu)";
       });
     }
 
     function logPaste(id, label) {
       const el = document.getElementById(id);
+      const out = document.getElementById("out-" + id);
+      if (!el || !out) return;
+
       el.addEventListener("paste", () => {
         setTimeout(() => {
-          document.getElementById("out-" + id).textContent =
-            label + ": pasted value = \"" + el.textContent || el.value + "\"";
+          const v = getValue(el);
+          out.textContent = label + ': pasted value = "' + v + '"';
         }, 0);
       });
     }
@@ -64,14 +67,14 @@ Line C</textarea>
     // Plain text (copy only)
     logCopy("plain-text", "Plain text");
 
-    // Textarea
-    logCopy("source-textarea", "Sourse TA");
-    logPaste("source-textarea", "Sourse TA");
-    
+    // Textareas
+    logCopy("source-textarea", "Source TA");
+    logPaste("source-textarea", "Source TA");
+
     logCopy("target-textarea", "Target TA");
     logPaste("target-textarea", "Target TA");
-    
   </script>
 
 </body>
 </html>
+```
