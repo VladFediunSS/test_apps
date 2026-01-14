@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Styled Select Test</title>
+</head>
+<body>
+
+  <h1>styled-select-test.html</h1>
+
+  <p><strong>Styled select</strong></p>
+
+  <!-- Trigger -->
+  <button
+    id="select-trigger"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    data-testid="select-trigger"
+  >
+    Choose option
+  </button>
+
+  <!-- Options -->
+  <ul
+    id="select-list"
+    role="listbox"
+    hidden
+    data-testid="select-list"
+  >
+    <li role="option" data-value="A" tabindex="0">Option A</li>
+    <li role="option" data-value="B" tabindex="0">Option B</li>
+    <li role="option" data-value="C" aria-disabled="true">Option C (disabled)</li>
+  </ul>
+
+  <p id="out-select">Styled select: no action</p>
+
+  <script>
+    const trigger = document.getElementById("select-trigger");
+    const list = document.getElementById("select-list");
+    const out = document.getElementById("out-select");
+
+    function openList() {
+      list.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      out.textContent = "Styled select: opened";
+    }
+
+    function closeList() {
+      list.hidden = true;
+      trigger.setAttribute("aria-expanded", "false");
+      out.textContent = "Styled select: closed";
+    }
+
+    trigger.addEventListener("click", () => {
+      const open = trigger.getAttribute("aria-expanded") === "true";
+      open ? closeList() : openList();
+    });
+
+    list.addEventListener("click", (e) => {
+      const option = e.target;
+      if (option.getAttribute("aria-disabled") === "true") return;
+
+      const value = option.getAttribute("data-value");
+      trigger.textContent = "Selected: " + value;
+      out.textContent = 'Styled select: selected "' + value + '"';
+      closeList();
+    });
+
+    trigger.addEventListener("blur", () => {
+      closeList();
+    });
+  </script>
+
+</body>
+</html>
