@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Vertical Scroll Test</title>
+  <style>
+    /* minimal styles only to enable scrolling */
+    body {
+      margin: 0;
+      padding: 8px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-bottom: 1px solid #000;
+      padding: 8px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    .table-wrap {
+      max-height: 5em;      /* ~5 rows */
+      overflow-y: auto;
+      border: 1px solid #000;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    td, th {
+      border: 1px solid #000;
+      padding: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <strong>scroll-vertical-test.html</strong>
+  </header>
+
+  <!-- Plain text -->
+  <p>
+    Plain text paragraph A.  
+    Add more text here to increase page height.
+  </p>
+
+  <!-- Textarea (inner scroll) -->
+  <label for="ta"><strong>Textarea (5 rows)</strong></label><br>
+  <textarea id="ta" rows="5">
+Line 1
+Line 2
+  </textarea>
+
+  <!-- Plain text -->
+  <p>
+    Plain text paragraph B.  
+    Add more text here to push content down.
+  </p>
+
+  <!-- Table (scrollable container) -->
+  <strong>Table (scrollable)</strong>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Col A</th>
+          <th>Col B</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Row 1</td>
+          <td>Value</td>
+        </tr>
+        <tr>
+          <td>Row 2</td>
+          <td>Value</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Plain text -->
+  <p>
+    Plain text paragraph C.  
+    Add more content to require page scroll.
+  </p>
+
+  <!-- Target button -->
+  <button type="button" id="btn" data-testid="confirm">
+    Confirm
+  </button>
+  <p id="out-btn" data-testid="out-btn">Button: (not clicked)</p>
+  
+  <script>
+    const set = (id, text) => (document.getElementById(id).textContent = text);
+
+    document.getElementById("btn").addEventListener("click", () => {
+      set("out-btn", "Button: clicked");
+    });
+
+  </script>
+
+</body>
+</html>
