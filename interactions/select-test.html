@@ -14,26 +14,32 @@
     <option value="">-- choose --</option>
     <option value="A">Option A</option>
     <option value="B">Option B</option>
-    <option value="C" disabled>Option C (disabled)</option>
+    <option value="C" disabled>Option C</option>
   </select>
 
-  <p id="out-select">Select: no action</p>
+  <p id="state">State: none</p>
+  <p id="selected">Selected: none</p>
 
   <script>
     const select = document.getElementById("select");
-    const out = document.getElementById("out-select");
+    const stateOut = document.getElementById("state");
+    const selectedOut = document.getElementById("selected");
+
+    function updateSelected() {
+      selectedOut.textContent = "Selected: " + (select.value || "none");
+    }
 
     select.addEventListener("focus", () => {
-      out.textContent = "Select: focused";
+      stateOut.textContent = "State: focused";
     });
 
     select.addEventListener("blur", () => {
-      out.textContent = "Select: blurred";
+      stateOut.textContent = "State: blurred";
     });
 
     select.addEventListener("change", () => {
-      out.textContent =
-        "Select: " + select.value;
+      stateOut.textContent = "State: changed";
+      updateSelected();
     });
   </script>
 
