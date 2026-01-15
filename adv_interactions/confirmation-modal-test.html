@@ -5,9 +5,19 @@
   <title>Decision Modal Test</title>
   <style>
     .overlay[hidden] { display: none; }
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.3);
-      display: flex; align-items: center; justify-content: center; }
-    .modal { background: #fff; border: 1px solid #000; padding: 8px; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal {
+      background: #fff;
+      border: 1px solid #000;
+      padding: 8px;
+    }
   </style>
 </head>
 <body>
@@ -16,40 +26,56 @@
 
   <button type="button" id="open" data-testid="open">Open modal</button>
 
-  <div id="overlay" class="overlay" hidden aria-hidden="true">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="title">
-      <p id="title"><strong>Decision modal</strong></p>
+  <div
+    id="overlay"
+    class="overlay"
+    hidden
+    aria-hidden="true"
+  >
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="title"
+    >
+      <p id="title"><strong>Are you sure?</strong></p>
       <button type="button" id="cancel" data-testid="cancel">Cancel</button>
       <button type="button" id="confirm" data-testid="confirm">Confirm</button>
     </div>
   </div>
 
-  <p id="result" data-testid="result">Result: no action</p>
+  <p id="result" data-testid="result">Result: none</p>
 
   <script>
     const openBtn = document.getElementById("open");
     const overlay = document.getElementById("overlay");
+    const modal = overlay.querySelector(".modal");
     const cancelBtn = document.getElementById("cancel");
     const confirmBtn = document.getElementById("confirm");
     const result = document.getElementById("result");
+
     let lastFocus = null;
 
     function focusables(container) {
-      return Array.from(container.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])'))
-        .filter(el => !el.disabled && el.offsetParent !== null);
+      return Array.from(
+        container.querySelectorAll('button,[tabindex]:not([tabindex="-1"])')
+      ).filter(el => !el.disabled);
     }
 
     function trapTab(e) {
       if (e.key !== "Tab") return;
-      const items = focusables(overlay);
+      const items = focusables(modal);
       if (!items.length) return;
+
       const first = items[0];
       const last = items[items.length - 1];
 
       if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault(); last.focus();
+        e.preventDefault();
+        last.focus();
       } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus();
+        e.preventDefault();
+        first.focus();
       }
     }
 
@@ -58,35 +84,40 @@
       overlay.hidden = false;
       overlay.setAttribute("aria-hidden", "false");
       cancelBtn.focus();
-      result.textContent = "Result: decision modal opened";
     }
 
-    function closeModal(reason) {
+    function closeModal(text) {
       overlay.hidden = true;
       overlay.setAttribute("aria-hidden", "true");
-      result.textContent = "Result: decision modal closed (" + reason + ")";
+      result.textContent = "Result: " + text;
       if (lastFocus) lastFocus.focus();
     }
 
     openBtn.addEventListener("click", openModal);
 
-    cancelBtn.addEventListener("click", () => closeModal("Cancel"));
-    confirmBtn.addEventListener("click", () => closeModal("Confirm"));
+    cancelBtn.addEventListener("click", () => closeModal("Cancelled"));
+    confirmBtn.addEventListener("click", () => closeModal("Confirmed"));
+
+    // Click on overlay (but not modal) → Cancelled (overlay)
+    overlay.addEventListener("mousedown", (e) => {
+      if (e.target === overlay) {
+        closeModal("Cancelled (overlay)");
+      }
+    });
 
     overlay.addEventListener("keydown", (e) => {
       trapTab(e);
 
       if (e.key === "Escape") {
         e.preventDefault();
-        closeModal("Esc=Cancel");
+        closeModal("Cancelled");
       }
 
       if (e.key === "Enter") {
         e.preventDefault();
-        closeModal("Enter=Confirm");
+        closeModal("Confirmed");
       }
     });
-    // Blocking: outside click does nothing (no close handler)
   </script>
 
 </body>
