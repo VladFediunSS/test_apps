@@ -7,33 +7,21 @@
   <title>Click Elements Test</title>
 </head>
 <body>
-  <h1>Click Elements Test</h1>
+  <h1>button-test.html</h1>
 
-  <!-- Button -->
-  <h2>Button</h2>
   <button type="button" id="btn" data-testid="btn">Test Button</button>
   <p id="out-btn" data-testid="out-btn">Button: (not clicked)</p>
 
   <!-- Input: button -->
-  <h2>Input type="button"</h2>
-  <input type="button" id="in-btn" data-testid="in-btn" value="Click input button" />
+  <input type="button" id="in-btn" data-testid="in-btn" value="Input Button" />
   <p id="out-in-btn" data-testid="out-in-btn">Input button: (not clicked)</p>
 
-  <!-- Link -->
-  <h2>Link (prevented navigation)</h2>
-  <a href="https://example.com" id="link" data-testid="link">Test Link</a>
-  <p id="out-link" data-testid="out-link">Link: (not clicked)</p>
 
   <script>
     const set = (id, text) => (document.getElementById(id).textContent = text);
 
     document.getElementById("btn").addEventListener("click", () => {
       set("out-btn", "Button: clicked");
-    });
-
-    document.getElementById("link").addEventListener("click", (e) => {
-      e.preventDefault();
-      set("out-link", "Link: clicked");
     });
 
     document.getElementById("in-btn").addEventListener("click", () => {
