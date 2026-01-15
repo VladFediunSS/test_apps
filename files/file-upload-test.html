@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>File Upload Test</title>
+</head>
+<body>
+
+  <h1>file-upload-test.html</h1>
+
+  <label for="file-input"><strong>Upload file</strong></label><br>
+
+  <input
+    type="file"
+    id="file-input"
+    data-testid="file-input"
+  >
+
+  <p id="file-name" data-testid="file-name">
+    Selected file: none
+  </p>
+
+  <script>
+    const input = document.getElementById("file-input");
+    const output = document.getElementById("file-name");
+
+    input.addEventListener("change", () => {
+      if (input.files && input.files.length > 0) {
+        output.textContent = "Selected file: " + input.files[0].name;
+      } else {
+        output.textContent = "Selected file: none";
+      }
+    });
+  </script>
+
+</body>
+</html>
