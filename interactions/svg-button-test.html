@@ -60,12 +60,26 @@
     </svg>
   </button>
 
+  <button type="button" id="btn" data-testid="confirm">
+    Confirm
+  </button>
+  
   <p id="result">Icon button: not clicked</p>
+  <p id="out-btn" data-testid="out-btn">Button: (not clicked)</p>
+  
+
+  
 
   <script>
     document.getElementById("icon-btn").addEventListener("click", () => {
       document.getElementById("result").textContent =
         "Icon button: clicked";
+    });
+
+    const set = (id, text) => (document.getElementById(id).textContent = text);
+
+    document.getElementById("btn").addEventListener("click", () => {
+      set("out-btn", "Button: clicked");
     });
   </script>
 
