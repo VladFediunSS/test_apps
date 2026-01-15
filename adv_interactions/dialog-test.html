@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Dialog Test</title>
+</head>
+<body>
+
+  <h1>dialog-test.html</h1>
+
+  <button type="button" id="open" data-testid="open">Open &lt;dialog&gt;</button>
+
+  <dialog id="dlg" data-testid="dlg">
+    <p><strong>&lt;dialog&gt; modal</strong></p>
+    <button type="button" id="close" data-testid="close">Close</button>
+  </dialog>
+
+  <p id="result" data-testid="result">Result: no action</p>
+
+  <script>
+    const openBtn = document.getElementById("open");
+    const closeBtn = document.getElementById("close");
+    const dlg = document.getElementById("dlg");
+    const result = document.getElementById("result");
+    let lastFocus = null;
+
+    openBtn.addEventListener("click", () => {
+      lastFocus = document.activeElement;
+      dlg.showModal(); // blocking
+      result.textContent = "Result: dialog opened";
+      closeBtn.focus();
+    });
+
+    closeBtn.addEventListener("click", () => {
+      dlg.close();
+      result.textContent = "Result: dialog closed (button)";
+      if (lastFocus) lastFocus.focus();
+    });
+
+    dlg.addEventListener("close", () => {
+      result.textContent = "Result: dialog closed";
+      if (lastFocus) lastFocus.focus();
+    });
+  </script>
+
+</body>
+</html>
