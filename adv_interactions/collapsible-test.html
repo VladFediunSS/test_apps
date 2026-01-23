@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Collapsible Test</title>
+</head>
+<body>
+
+  <h1>collapsible-test.html</h1>
+
+  <button id="col-1-btn" aria-expanded="false" aria-controls="col-1">
+    Panel A
+  </button>
+  <div id="col-1" hidden>
+    <p>Content A</p>
+  </div>
+
+  <button id="col-2-btn" aria-expanded="false" aria-controls="col-2">
+    Panel B
+  </button>
+  <div id="col-2" hidden>
+    <p>Content B</p>
+  </div>
+
+  <p id="state">State: none</p>
+
+  <script>
+    function setup(btnId, panelId) {
+      const btn = document.getElementById(btnId);
+      const panel = document.getElementById(panelId);
+
+      btn.addEventListener("click", () => {
+        const open = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!open));
+        panel.hidden = open;
+
+        document.getElementById("state").textContent =
+          "State: " + (open ? "closed " : "open ") + btn.textContent;
+      });
+    }
+
+    setup("col-1-btn", "col-1");
+    setup("col-2-btn", "col-2");
+  </script>
+
+</body>
+</html>
