@@ -7,7 +7,7 @@
     /* minimal styles */
     #overlay[hidden],
     #drawer[hidden],
-    #tooltip[hidden] {
+    #tip-custom[hidden] {
       display: none;
     }
 
@@ -29,13 +29,13 @@
     }
 
     /* tooltip */
-    #tooltip {
+    #tip-custom {
       position: absolute;
-      margin-top: 4px;
       padding: 4px;
       border: 1px solid #000;
       background: #fff;
       font-size: 12px;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -46,7 +46,7 @@
 
   <main>
     <button type="button" id="open-drawer" data-testid="open-drawer">
-      Menu
+      Panel
     </button>
 
     <br><br>
@@ -56,13 +56,19 @@
       type="button"
       id="bg-button"
       data-testid="bg-button"
+      aria-describedby="tip-custom"
     >
       Test Button
     </button>
 
-    <div id="tooltip" data-testid="tooltip" hidden>
-      Test meassage
-    </div>
+    <span
+      id="tip-custom"
+      role="tooltip"
+      data-testid="tip-custom"
+      hidden
+    >
+      Test message
+    </span>
   </main>
 
   <!-- Overlay -->
@@ -93,13 +99,13 @@
     const result = document.getElementById("result");
 
     const bgBtn = document.getElementById("bg-button");
-    const tooltip = document.getElementById("tooltip");
+    const tooltip = document.getElementById("tip-custom");
 
     /* Drawer logic */
     function openDrawer(source) {
       overlay.hidden = false;
       drawer.hidden = false;
-      tooltip.hidden = true; // tooltip must not remain visible
+      tooltip.hidden = true; // force-hide tooltip
       result.textContent = "State: open (" + source + ")";
       closeBtn.focus();
     }
@@ -122,13 +128,14 @@
       }
     });
 
-    /* Tooltip logic (background only) */
+    /* Tooltip logic (show on hover, to the right of the button) */
     bgBtn.addEventListener("mouseenter", () => {
       if (!drawer.hidden) return; // blocked by overlay
-      tooltip.hidden = false;
+
       const rect = bgBtn.getBoundingClientRect();
-      tooltip.style.left = rect.left + "px";
-      tooltip.style.top = rect.bottom + "px";
+      tooltip.style.left = rect.right + 8 + "px"; // right side
+      tooltip.style.top = rect.top + "px";
+      tooltip.hidden = false;
     });
 
     bgBtn.addEventListener("mouseleave", () => {
