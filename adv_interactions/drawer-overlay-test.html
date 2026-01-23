@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <title>Drawer / Overlay Test</title>
   <style>
-    /* minimal styles to make overlay + drawer visible */
+    /* minimal styles */
     #overlay[hidden],
-    #drawer[hidden] {
+    #drawer[hidden],
+    #tooltip[hidden] {
       display: none;
     }
 
@@ -26,27 +27,55 @@
       border-left: 1px solid #000;
       padding: 8px;
     }
+
+    /* tooltip */
+    #tooltip {
+      position: absolute;
+      margin-top: 4px;
+      padding: 4px;
+      border: 1px solid #000;
+      background: #fff;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Background page -->
-  <header>
-    <strong>Header</strong>
-  </header>
+  <!-- Background -->
+  <header>drawer-overlay-test.html</header>
 
   <main>
     <button type="button" id="open-drawer" data-testid="open-drawer">
-      Open drawer
+      Menu
     </button>
-    <p>Background content (should be blocked)</p>
+
+    <br><br>
+
+    <!-- Background button with tooltip -->
+    <button
+      type="button"
+      id="bg-button"
+      data-testid="bg-button"
+    >
+      Test Button
+    </button>
+
+    <div id="tooltip" data-testid="tooltip" hidden>
+      Test meassage
+    </div>
   </main>
 
   <!-- Overlay -->
   <div id="overlay" hidden data-testid="overlay"></div>
 
   <!-- Drawer -->
-  <aside id="drawer" hidden role="dialog" aria-modal="true" data-testid="drawer">
+  <aside
+    id="drawer"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    data-testid="drawer"
+  >
     <p><strong>Drawer</strong></p>
     <button type="button" id="close-drawer" data-testid="close-drawer">
       Close
@@ -63,9 +92,14 @@
     const drawer = document.getElementById("drawer");
     const result = document.getElementById("result");
 
+    const bgBtn = document.getElementById("bg-button");
+    const tooltip = document.getElementById("tooltip");
+
+    /* Drawer logic */
     function openDrawer(source) {
       overlay.hidden = false;
       drawer.hidden = false;
+      tooltip.hidden = true; // tooltip must not remain visible
       result.textContent = "State: open (" + source + ")";
       closeBtn.focus();
     }
@@ -77,21 +111,28 @@
       openBtn.focus();
     }
 
-    // Open
     openBtn.addEventListener("click", () => openDrawer("button"));
-
-    // Close via close button
     closeBtn.addEventListener("click", () => closeDrawer("button"));
-
-    // Close via overlay click
     overlay.addEventListener("mousedown", () => closeDrawer("overlay"));
 
-    // Close via Esc
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !drawer.hidden) {
         e.preventDefault();
         closeDrawer("Esc");
       }
+    });
+
+    /* Tooltip logic (background only) */
+    bgBtn.addEventListener("mouseenter", () => {
+      if (!drawer.hidden) return; // blocked by overlay
+      tooltip.hidden = false;
+      const rect = bgBtn.getBoundingClientRect();
+      tooltip.style.left = rect.left + "px";
+      tooltip.style.top = rect.bottom + "px";
+    });
+
+    bgBtn.addEventListener("mouseleave", () => {
+      tooltip.hidden = true;
     });
   </script>
 
