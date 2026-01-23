@@ -44,14 +44,16 @@
       }
     });
 
-    // 3) Ctrl/Cmd+S confirms input (capture at document level)
-    document.addEventListener("keydown", (e) => {
-      const isSave = (e.key === "s" || e.key === "S") && (e.ctrlKey || e.metaKey);
-      if (isSave) {
-        e.preventDefault();
-        confirm((e.metaKey ? "Cmd+S" : "Ctrl+S"));
-      }
-    });
+// 3) Ctrl+S (Windows/Linux) or Cmd+S (macOS) confirms input
+document.addEventListener("keydown", (e) => {
+  const isCtrlS = e.key.toLowerCase() === "s" && e.ctrlKey && !e.metaKey;
+  const isCmdS  = e.key.toLowerCase() === "s" && e.metaKey && !e.ctrlKey;
+
+  if (isCtrlS || isCmdS) {
+    e.preventDefault();
+    confirm(isCmdS ? "Cmd+S" : "Ctrl+S");
+  }
+});
   </script>
 
 </body>
