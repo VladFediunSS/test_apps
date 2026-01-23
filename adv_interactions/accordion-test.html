@@ -8,43 +8,49 @@
 
   <h1>accordion-test.html</h1>
 
-  <button id="acc-1-btn" aria-expanded="false" aria-controls="acc-1">
-    Section 1
-  </button>
+  <button id="acc-1-btn" aria-expanded="false" aria-controls="acc-1">Section 1</button>
   <div id="acc-1" hidden>
-    <p>Content 1</p>
+    <label><input type="checkbox" id="acc-1-1" data-testid="acc-1-1"> 1.1</label><br>
+    <label><input type="checkbox" id="acc-1-2" data-testid="acc-1-2"> 1.2</label>
   </div>
 
-  <button id="acc-2-btn" aria-expanded="false" aria-controls="acc-2">
-    Section 2
-  </button>
+  <button id="acc-2-btn" aria-expanded="false" aria-controls="acc-2">Section 2</button>
   <div id="acc-2" hidden>
-    <p>Content 2</p>
+    <label><input type="checkbox" id="acc-2-1" data-testid="acc-2-1"> 2.1</label><br>
+    <label><input type="checkbox" id="acc-2-2" data-testid="acc-2-2"> 2.2</label>
   </div>
 
-  <p id="state">State: none</p>
+  <button id="acc-3-btn" aria-expanded="false" aria-controls="acc-3">Section 3</button>
+  <div id="acc-3" hidden>
+    <label><input type="checkbox" id="acc-3-1" data-testid="acc-3-1"> 3.1</label><br>
+    <label><input type="checkbox" id="acc-3-2" data-testid="acc-3-2"> 3.2</label>
+  </div>
+
+  <p id="state" data-testid="state">State: none</p>
 
   <script>
     const items = [
-      { btn: "acc-1-btn", panel: "acc-1" },
-      { btn: "acc-2-btn", panel: "acc-2" }
+      { btn: "acc-1-btn", panel: "acc-1", name: "Section 1" },
+      { btn: "acc-2-btn", panel: "acc-2", name: "Section 2" },
+      { btn: "acc-3-btn", panel: "acc-3", name: "Section 3" }
     ];
 
-    items.forEach(({ btn, panel }) => {
-      const b = document.getElementById(btn);
-      const p = document.getElementById(panel);
+    function closeAll() {
+      items.forEach(i => {
+        document.getElementById(i.btn).setAttribute("aria-expanded", "false");
+        document.getElementById(i.panel).hidden = true;
+      });
+    }
+
+    items.forEach(i => {
+      const b = document.getElementById(i.btn);
+      const p = document.getElementById(i.panel);
 
       b.addEventListener("click", () => {
-        items.forEach(i => {
-          document.getElementById(i.btn).setAttribute("aria-expanded", "false");
-          document.getElementById(i.panel).hidden = true;
-        });
-
+        closeAll();
         b.setAttribute("aria-expanded", "true");
         p.hidden = false;
-
-        document.getElementById("state").textContent =
-          "State: open " + b.textContent;
+        document.getElementById("state").textContent = "State: open " + i.name;
       });
     });
   </script>
