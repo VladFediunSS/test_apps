@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Accordion Test</title>
+</head>
+<body>
+
+  <h1>accordion-test.html</h1>
+
+  <button id="acc-1-btn" aria-expanded="false" aria-controls="acc-1">
+    Section 1
+  </button>
+  <div id="acc-1" hidden>
+    <p>Content 1</p>
+  </div>
+
+  <button id="acc-2-btn" aria-expanded="false" aria-controls="acc-2">
+    Section 2
+  </button>
+  <div id="acc-2" hidden>
+    <p>Content 2</p>
+  </div>
+
+  <p id="state">State: none</p>
+
+  <script>
+    const items = [
+      { btn: "acc-1-btn", panel: "acc-1" },
+      { btn: "acc-2-btn", panel: "acc-2" }
+    ];
+
+    items.forEach(({ btn, panel }) => {
+      const b = document.getElementById(btn);
+      const p = document.getElementById(panel);
+
+      b.addEventListener("click", () => {
+        items.forEach(i => {
+          document.getElementById(i.btn).setAttribute("aria-expanded", "false");
+          document.getElementById(i.panel).hidden = true;
+        });
+
+        b.setAttribute("aria-expanded", "true");
+        p.hidden = false;
+
+        document.getElementById("state").textContent =
+          "State: open " + b.textContent;
+      });
+    });
+  </script>
+
+</body>
+</html>
