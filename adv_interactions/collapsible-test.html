@@ -8,39 +8,43 @@
 
   <h1>collapsible-test.html</h1>
 
-  <button id="col-1-btn" aria-expanded="false" aria-controls="col-1">
-    Panel A
-  </button>
+  <button id="col-1-btn" aria-expanded="false" aria-controls="col-1">Panel 1</button>
   <div id="col-1" hidden>
-    <p>Content A</p>
+    <label><input type="checkbox" id="col-1-1" data-testid="col-1-1"> 1.1</label><br>
+    <label><input type="checkbox" id="col-1-2" data-testid="col-1-2"> 1.2</label>
   </div>
 
-  <button id="col-2-btn" aria-expanded="false" aria-controls="col-2">
-    Panel B
-  </button>
+  <button id="col-2-btn" aria-expanded="false" aria-controls="col-2">Panel 2</button>
   <div id="col-2" hidden>
-    <p>Content B</p>
+    <label><input type="checkbox" id="col-2-1" data-testid="col-2-1"> 2.1</label><br>
+    <label><input type="checkbox" id="col-2-2" data-testid="col-2-2"> 2.2</label>
   </div>
 
-  <p id="state">State: none</p>
+  <button id="col-3-btn" aria-expanded="false" aria-controls="col-3">Panel 3</button>
+  <div id="col-3" hidden>
+    <label><input type="checkbox" id="col-3-1" data-testid="col-3-1"> 3.1</label><br>
+    <label><input type="checkbox" id="col-3-2" data-testid="col-3-2"> 3.2</label>
+  </div>
+
+  <p id="state" data-testid="state">State: none</p>
 
   <script>
-    function setup(btnId, panelId) {
+    function setup(btnId, panelId, name) {
       const btn = document.getElementById(btnId);
       const panel = document.getElementById(panelId);
+      const state = document.getElementById("state");
 
       btn.addEventListener("click", () => {
         const open = btn.getAttribute("aria-expanded") === "true";
         btn.setAttribute("aria-expanded", String(!open));
         panel.hidden = open;
-
-        document.getElementById("state").textContent =
-          "State: " + (open ? "closed " : "open ") + btn.textContent;
+        state.textContent = "State: " + (open ? "closed " : "open ") + name;
       });
     }
 
-    setup("col-1-btn", "col-1");
-    setup("col-2-btn", "col-2");
+    setup("col-1-btn", "col-1", "Panel 1");
+    setup("col-2-btn", "col-2", "Panel 2");
+    setup("col-3-btn", "col-3", "Panel 3");
   </script>
 
 </body>
