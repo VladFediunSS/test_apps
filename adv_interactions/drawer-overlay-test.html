@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Drawer / Overlay Test</title>
+  <style>
+    /* minimal styles to make overlay + drawer visible */
+    #overlay[hidden],
+    #drawer[hidden] {
+      display: none;
+    }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+    }
+
+    #drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 240px;
+      height: 100%;
+      background: #fff;
+      border-left: 1px solid #000;
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background page -->
+  <header>
+    <strong>Header</strong>
+  </header>
+
+  <main>
+    <button type="button" id="open-drawer" data-testid="open-drawer">
+      Open drawer
+    </button>
+    <p>Background content (should be blocked)</p>
+  </main>
+
+  <!-- Overlay -->
+  <div id="overlay" hidden data-testid="overlay"></div>
+
+  <!-- Drawer -->
+  <aside id="drawer" hidden role="dialog" aria-modal="true" data-testid="drawer">
+    <p><strong>Drawer</strong></p>
+    <button type="button" id="close-drawer" data-testid="close-drawer">
+      Close
+    </button>
+  </aside>
+
+  <!-- Result -->
+  <p id="result" data-testid="result">State: closed</p>
+
+  <script>
+    const openBtn = document.getElementById("open-drawer");
+    const closeBtn = document.getElementById("close-drawer");
+    const overlay = document.getElementById("overlay");
+    const drawer = document.getElementById("drawer");
+    const result = document.getElementById("result");
+
+    function openDrawer(source) {
+      overlay.hidden = false;
+      drawer.hidden = false;
+      result.textContent = "State: open (" + source + ")";
+      closeBtn.focus();
+    }
+
+    function closeDrawer(source) {
+      overlay.hidden = true;
+      drawer.hidden = true;
+      result.textContent = "State: closed (" + source + ")";
+      openBtn.focus();
+    }
+
+    // Open
+    openBtn.addEventListener("click", () => openDrawer("button"));
+
+    // Close via close button
+    closeBtn.addEventListener("click", () => closeDrawer("button"));
+
+    // Close via overlay click
+    overlay.addEventListener("mousedown", () => closeDrawer("overlay"));
+
+    // Close via Esc
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !drawer.hidden) {
+        e.preventDefault();
+        closeDrawer("Esc");
+      }
+    });
+  </script>
+
+</body>
+</html>
