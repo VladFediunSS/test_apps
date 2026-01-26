@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>DateTime Picker Test</title>
+</head>
+<body>
+
+  <h1>datetime-picker-test.html</h1>
+
+  <label for="datetime"><strong>Date & Time</strong></label><br>
+  <input
+    type="datetime-local"
+    id="datetime"
+    data-testid="datetime"
+  >
+
+  <p id="result">Selected: none</p>
+
+  <script>
+    const datetime = document.getElementById("datetime");
+    const result = document.getElementById("result");
+
+    datetime.addEventListener("change", () => {
+      result.textContent = "Selected: " + (datetime.value || "none");
+    });
+  </script>
+
+</body>
+</html>
