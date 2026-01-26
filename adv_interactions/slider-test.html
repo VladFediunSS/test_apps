@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Slider Test</title>
+</head>
+<body>
+
+  <h1>slider-test.html</h1>
+
+  <label for="slider"><strong>Slider</strong></label><br>
+
+  <input
+    type="range"
+    id="slider"
+    min="0"
+    max="10"
+    step="1"
+    value="5"
+    data-testid="slider"
+  >
+
+  <p id="result" data-testid="result">
+    Selected: 5
+  </p>
+
+  <script>
+    const slider = document.getElementById("slider");
+    const result = document.getElementById("result");
+
+    slider.addEventListener("input", () => {
+      result.textContent = "Selected: " + slider.value;
+    });
+
+    slider.addEventListener("change", () => {
+      result.textContent = "Selected: " + slider.value;
+    });
+  </script>
+
+</body>
+</html>
