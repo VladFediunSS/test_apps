@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Progress Test</title>
+</head>
+<body>
+
+  <h1>progress-test.html</h1>
+
+  <!-- Indeterminate progress (waiting) -->
+  <p><strong>Indeterminate progress</strong></p>
+  <progress id="progress-indeterminate" data-testid="progress-indeterminate"></progress>
+  <p id="out-indeterminate">State: waiting</p>
+
+  <!-- Determinate progress -->
+  <p><strong>Determinate progress</strong></p>
+  <progress
+    id="progress-determinate"
+    max="100"
+    value="0"
+    data-testid="progress-determinate"
+  ></progress>
+  <p id="out-determinate">Value: 0</p>
+
+  <button type="button" id="advance" data-testid="advance">
+    Advance progress
+  </button>
+
+  <script>
+    const progress = document.getElementById("progress-determinate");
+    const output = document.getElementById("out-determinate");
+
+    document.getElementById("advance").addEventListener("click", () => {
+      let value = Number(progress.value) || 0;
+      value = Math.min(100, value + 20);
+      progress.value = value;
+      output.textContent = "Value: " + value;
+    });
+  </script>
+
+</body>
+</html>
