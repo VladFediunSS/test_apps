@@ -2,45 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Date / Time Picker Test</title>
+  <title>Date Picker Test</title>
 </head>
 <body>
 
-  <h1>date-time-picker-test.html</h1>
+  <h1>date-picker-test.html</h1>
 
-  <!-- Date -->
   <label for="date"><strong>Date</strong></label><br>
-  <input type="date" id="date" data-testid="date"><br>
-  <p id="out-date">Date: none</p>
+  <input type="date" id="date" data-testid="date">
 
-  <!-- Time -->
-  <label for="time"><strong>Time</strong></label><br>
-  <input type="time" id="time" data-testid="time"><br>
-  <p id="out-time">Time: none</p>
-
-  <!-- Datetime local -->
-  <label for="datetime"><strong>Date & Time</strong></label><br>
-  <input type="datetime-local" id="datetime" data-testid="datetime"><br>
-  <p id="out-datetime">Datetime: none</p>
+  <p id="result">Selected: none</p>
 
   <script>
     const date = document.getElementById("date");
-    const time = document.getElementById("time");
-    const datetime = document.getElementById("datetime");
+    const result = document.getElementById("result");
 
     date.addEventListener("change", () => {
-      document.getElementById("out-date").textContent =
-        "Date: " + (date.value || "none");
-    });
-
-    time.addEventListener("change", () => {
-      document.getElementById("out-time").textContent =
-        "Time: " + (time.value || "none");
-    });
-
-    datetime.addEventListener("change", () => {
-      document.getElementById("out-datetime").textContent =
-        "Datetime: " + (datetime.value || "none");
+      result.textContent = "Selected: " + (date.value || "none");
     });
   </script>
 
