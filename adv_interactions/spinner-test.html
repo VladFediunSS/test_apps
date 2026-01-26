@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="uk">
 <head>
-  <meta charset="utf-8">
-  <title>Loading Spinner Test</title>
+  <meta charset="utf-8" />
+  <title>Loading Spinner Test (timed)</title>
   <style>
-    /* minimal spinner + overlay */
+    /* minimal overlay + spinner */
     #overlay[hidden],
     #spinner[hidden] {
       display: none;
@@ -13,73 +13,154 @@
     #overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.2);
+      background: rgba(0,0,0,0.25);
+      z-index: 1000;
     }
 
     #spinner {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 24px;
-      height: 24px;
-      margin: -12px 0 0 -12px;
+      width: 32px;
+      height: 32px;
+      margin: -16px 0 0 -16px;
       border: 4px solid #ccc;
       border-top-color: #000;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+      z-index: 1001;
     }
 
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* small layout nicety */
+    .control { margin: 8px 0; }
+    label { margin-right: 6px; }
   </style>
 </head>
 <body>
 
   <h1>spinner-test.html</h1>
 
-  <button type="button" id="start" data-testid="start">
-    Start loading
-  </button>
+  <!-- 1) Start with N seconds -->
+  <div class="control">
+    <label for="sec-input"><strong>Start (seconds):</strong></label>
+    <input id="sec-input" type="number" min="0.1" step="0.1" value="10" data-testid="sec-input">
+    <button type="button" id="start" data-testid="start">Start</button>
+    <div><strong>Status 1:</strong> <span id="status1">none</span></div>
+  </div>
 
-  <button type="button" id="stop" data-testid="stop">
-    Stop loading
-  </button>
+  <!-- 2) Start random 1..10s -->
+  <div class="control">
+    <button type="button" id="start-random" data-testid="start-random">Start random (1–10s)</button>
+    <div><strong>Status 1:</strong> <span id="status1b">none</span></div>
+  </div>
 
-  <!-- Overlay -->
+  <!-- 3) Test button to verify overlay blocking -->
+  <div class="control">
+    <button type="button" id="test-btn" data-testid="test-btn">Test button</button>
+    <div><strong>State:</strong> <span id="test-state">none</span></div>
+  </div>
+
+  <!-- Overlay + spinner -->
   <div id="overlay" hidden data-testid="overlay"></div>
-
-  <!-- Spinner -->
-  <div
-    id="spinner"
-    role="status"
-    aria-live="polite"
-    data-testid="spinner"
-    hidden
-  ></div>
-
-  <p id="result" data-testid="result">State: idle</p>
+  <div id="spinner" role="status" aria-live="polite" aria-hidden="true" hidden data-testid="spinner"></div>
 
   <script>
-    const overlay = document.getElementById("overlay");
-    const spinner = document.getElementById("spinner");
-    const result = document.getElementById("result");
+    const startBtn = document.getElementById('start');
+    const startRandomBtn = document.getElementById('start-random');
+    const inputSec = document.getElementById('sec-input');
+    const status1 = document.getElementById('status1');
+    const status1b = document.getElementById('status1b');
 
-    function startLoading() {
+    const overlay = document.getElementById('overlay');
+    const spinner = document.getElementById('spinner');
+
+    const testBtn = document.getElementById('test-btn');
+    const testState = document.getElementById('test-state');
+
+    let timerId = null;
+    let loading = false;
+
+    function setStatus(s) {
+      status1.textContent = s;
+      status1b.textContent = s;
+    }
+
+    function showSpinner() {
       overlay.hidden = false;
       spinner.hidden = false;
-      result.textContent = "State: loading";
+      spinner.setAttribute('aria-hidden', 'false');
+      setStatus('loading');
+      loading = true;
     }
 
-    function stopLoading() {
+    function hideSpinner(finalState = 'done') {
       overlay.hidden = true;
       spinner.hidden = true;
-      result.textContent = "State: done";
+      spinner.setAttribute('aria-hidden', 'true');
+      setStatus(finalState);
+      loading = false;
+      timerId = null;
     }
 
-    document.getElementById("start").addEventListener("click", startLoading);
-    document.getElementById("stop").addEventListener("click", stopLoading);
-  </script>
+    function startForSeconds(seconds) {
+      // cancel existing
+      if (timerId) {
+        clearTimeout(timerId);
+        timerId = null;
+      }
+      showSpinner();
+      // ensure seconds is positive number
+      const ms = Math.max(0, Number(seconds)) * 1000;
+      timerId = setTimeout(() => hideSpinner('done'), ms);
+    }
 
+    startBtn.addEventListener('click', () => {
+      const s = parseFloat(inputSec.value);
+      // if invalid or <=0, treat as 0.1s
+      const sec = isFinite(s) && s > 0 ? s : 0.1;
+      startForSeconds(sec);
+    });
+
+    startRandomBtn.addEventListener('click', () => {
+      // random 1..10 seconds
+      const sec = Math.floor(Math.random() * 10) + 1;
+      startForSeconds(sec);
+    });
+
+    // Test button: only works if not blocked (i.e. overlay hidden)
+    testBtn.addEventListener('click', () => {
+      if (loading) {
+        // blocked by overlay: ignore
+        // (optionally we could set a different message, but requirement - blocked)
+        return;
+      }
+      testState.textContent = 'clicked';
+    });
+
+    // Also prevent pointer events reaching testBtn when overlay visible by checking clicks on document:
+    // Not strictly necessary because overlay covers the screen, but keep safe:
+    document.addEventListener('click', (e) => {
+      if (!loading) return;
+      // if click target is test button (or inside it), prevent action
+      if (e.target && (e.target === testBtn || testBtn.contains(e.target))) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+      }
+    });
+
+    // initialize statuses
+    setStatus('none');
+    status1b.textContent = status1.textContent;
+
+    // Optional: expose simple keyboard stop for debugging (press 's' to stop)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 's') {
+        if (timerId) { clearTimeout(timerId); timerId = null; }
+        hideSpinner('done');
+      }
+    });
+  </script>
 </body>
 </html>
