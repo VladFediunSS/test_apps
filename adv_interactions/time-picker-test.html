@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Time Picker Test</title>
+</head>
+<body>
+
+  <h1>time-picker-test.html</h1>
+
+  <label for="time"><strong>Time</strong></label><br>
+  <input type="time" id="time" data-testid="time">
+
+  <p id="result">Selected: none</p>
+
+  <script>
+    const time = document.getElementById("time");
+    const result = document.getElementById("result");
+
+    time.addEventListener("change", () => {
+      result.textContent = "Selected: " + (time.value || "none");
+    });
+  </script>
+
+</body>
+</html>
