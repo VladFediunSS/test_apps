@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Loading Spinner Test</title>
+  <style>
+    /* minimal spinner + overlay */
+    #overlay[hidden],
+    #spinner[hidden] {
+      display: none;
+    }
+
+    #overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.2);
+    }
+
+    #spinner {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 24px;
+      height: 24px;
+      margin: -12px 0 0 -12px;
+      border: 4px solid #ccc;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>spinner-test.html</h1>
+
+  <button type="button" id="start" data-testid="start">
+    Start loading
+  </button>
+
+  <button type="button" id="stop" data-testid="stop">
+    Stop loading
+  </button>
+
+  <!-- Overlay -->
+  <div id="overlay" hidden data-testid="overlay"></div>
+
+  <!-- Spinner -->
+  <div
+    id="spinner"
+    role="status"
+    aria-live="polite"
+    data-testid="spinner"
+    hidden
+  ></div>
+
+  <p id="result" data-testid="result">State: idle</p>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const spinner = document.getElementById("spinner");
+    const result = document.getElementById("result");
+
+    function startLoading() {
+      overlay.hidden = false;
+      spinner.hidden = false;
+      result.textContent = "State: loading";
+    }
+
+    function stopLoading() {
+      overlay.hidden = true;
+      spinner.hidden = true;
+      result.textContent = "State: done";
+    }
+
+    document.getElementById("start").addEventListener("click", startLoading);
+    document.getElementById("stop").addEventListener("click", stopLoading);
+  </script>
+
+</body>
+</html>
