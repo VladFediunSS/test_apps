@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -8,13 +7,13 @@
 <body>
 
   <h1>keyboard-submit-test.html</h1>
-
+  <p>Click Submit, Enter, Cmd/Ctrl+S to submit. Click Esc to clear.</p>
   <label for="text"><strong>Input</strong></label><br>
   <input type="text" id="text" data-testid="text">
   <button type="button" id="submit" data-testid="submit">Submit</button>
 
   <p>Clicked: <span id="clicked" data-testid="clicked">none</span></p>
-  <p>Value: <span id="value" data-testid="value"></span></p>
+  <p>Value: <span id="value" data-testid="value">none</span></p>
 
   <script>
     const input = document.getElementById("text");
@@ -22,15 +21,19 @@
     const clickedOut = document.getElementById("clicked");
     const valueOut = document.getElementById("value");
 
+    function normalizeValue() {
+      return input.value.trim() === "" ? "none" : input.value;
+    }
+
     function setResult(source) {
       clickedOut.textContent = source;
-      valueOut.textContent = input.value;
+      valueOut.textContent = normalizeValue();
     }
 
     function clear(source) {
       input.value = "";
       clickedOut.textContent = source;
-      valueOut.textContent = "";
+      valueOut.textContent = "none";
     }
 
     // 1) Button Submit confirms input
@@ -62,4 +65,3 @@
 
 </body>
 </html>
-```
