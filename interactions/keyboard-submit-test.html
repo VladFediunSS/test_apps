@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -12,49 +13,53 @@
   <input type="text" id="text" data-testid="text">
   <button type="button" id="submit" data-testid="submit">Submit</button>
 
-  <p id="result" data-testid="result">Result: no action</p>
+  <p>Clicked: <span id="clicked" data-testid="clicked">none</span></p>
+  <p>Value: <span id="value" data-testid="value"></span></p>
 
   <script>
     const input = document.getElementById("text");
     const submit = document.getElementById("submit");
-    const result = document.getElementById("result");
+    const clickedOut = document.getElementById("clicked");
+    const valueOut = document.getElementById("value");
 
-    function confirm(source) {
-      result.textContent = 'Result: confirmed by ' + source + ' with value="' + input.value + '"';
+    function setResult(source) {
+      clickedOut.textContent = source;
+      valueOut.textContent = input.value;
     }
 
     function clear(source) {
       input.value = "";
-      result.textContent = "Result: cleared by " + source;
+      clickedOut.textContent = source;
+      valueOut.textContent = "";
     }
 
     // 1) Button Submit confirms input
-    submit.addEventListener("click", () => confirm("button"));
+    submit.addEventListener("click", () => setResult("button"));
 
-    // 2) Enter confirms input
+    // 2) Enter confirms input, 4) Esc clears input
     input.addEventListener("keydown", (e) => {
       if (e.key === "Enter") {
         e.preventDefault();
-        confirm("Enter");
+        setResult("Enter");
       }
-      // 4) Esc clears input
       if (e.key === "Escape") {
         e.preventDefault();
         clear("Escape");
       }
     });
 
-// 3) Ctrl+S (Windows/Linux) or Cmd+S (macOS) confirms input
-document.addEventListener("keydown", (e) => {
-  const isCtrlS = e.key.toLowerCase() === "s" && e.ctrlKey && !e.metaKey;
-  const isCmdS  = e.key.toLowerCase() === "s" && e.metaKey && !e.ctrlKey;
+    // 3) Ctrl+S (Windows/Linux) or Cmd+S (macOS) confirms input
+    document.addEventListener("keydown", (e) => {
+      const isCtrlS = e.key.toLowerCase() === "s" && e.ctrlKey && !e.metaKey;
+      const isCmdS  = e.key.toLowerCase() === "s" && e.metaKey && !e.ctrlKey;
 
-  if (isCtrlS || isCmdS) {
-    e.preventDefault();
-    confirm(isCmdS ? "Cmd+S" : "Ctrl+S");
-  }
-});
+      if (isCtrlS || isCmdS) {
+        e.preventDefault();
+        setResult(isCmdS ? "Cmd+S" : "Ctrl+S");
+      }
+    });
   </script>
 
 </body>
 </html>
+```
