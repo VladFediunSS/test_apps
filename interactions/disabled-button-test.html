@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Disabled Button Test</title>
+  <style>
+    .error {
+      border: 2px solid red;
+    }
+    #error-message[hidden] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>disabled-button-test.html</h1>
+
+  <label for="input">Number input</label><br>
+  <input type="text" id="input" data-testid="input">
+  <div id="error-message" data-testid="error-message" hidden>
+    Validation error
+  </div>
+
+  <br>
+  <button type="button" id="submit" data-testid="submit" disabled>
+    Submit
+  </button>
+
+  <script>
+    const input = document.getElementById("input");
+    const submit = document.getElementById("submit");
+    const errorMessage = document.getElementById("error-message");
+
+    function validate() {
+      const value = input.value.trim();
+
+      const isEmpty = value === "";
+      const isNumeric = /^\d+$/.test(value);
+
+      if (isEmpty) {
+        input.classList.remove("error");
+        errorMessage.hidden = true;
+        submit.disabled = true;
+        return;
+      }
+
+      if (!isNumeric) {
+        input.classList.add("error");
+        errorMessage.hidden = false;
+        submit.disabled = true;
+        return;
+      }
+
+      input.classList.remove("error");
+      errorMessage.hidden = true;
+      submit.disabled = false;
+    }
+
+    input.addEventListener("input", validate);
+  </script>
+
+</body>
+</html>
