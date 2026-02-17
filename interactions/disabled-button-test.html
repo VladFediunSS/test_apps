@@ -16,10 +16,10 @@
 
   <h1>disabled-button-test.html</h1>
 
-  <label for="input">Number input</label><br>
+  <label for="input">Number input (type letter to trigger validation error)</label><br>
   <input type="text" id="input" data-testid="input">
   <div id="error-message" data-testid="error-message" hidden>
-    Validation error
+    Incorrect input
   </div>
 
   <br>
@@ -27,14 +27,18 @@
     Submit
   </button>
 
+  <p>State: <span id="state" data-testid="state">none</span></p>
+  <p>Value: <span id="value" data-testid="value">none</span></p>
+
   <script>
     const input = document.getElementById("input");
     const submit = document.getElementById("submit");
     const errorMessage = document.getElementById("error-message");
+    const stateOut = document.getElementById("state");
+    const valueOut = document.getElementById("value");
 
     function validate() {
       const value = input.value.trim();
-
       const isEmpty = value === "";
       const isNumeric = /^\d+$/.test(value);
 
@@ -58,6 +62,27 @@
     }
 
     input.addEventListener("input", validate);
+
+    // Hover state
+    submit.addEventListener("mouseenter", () => {
+      if (!submit.disabled) {
+        stateOut.textContent = "hovered";
+      }
+    });
+
+    submit.addEventListener("mouseleave", () => {
+      if (!submit.disabled && stateOut.textContent === "hovered") {
+        stateOut.textContent = "none";
+      }
+    });
+
+    // Click state
+    submit.addEventListener("click", () => {
+      if (submit.disabled) return;
+
+      stateOut.textContent = "clicked";
+      valueOut.textContent = input.value.trim() || "none";
+    });
   </script>
 
 </body>
